@@ -8,34 +8,6 @@ Created on Sat Feb 10 23:11:59 2018
 
 from prettytable import PrettyTable
 
-#a
-#Out[11]: ['I01', 'I04', 'I09']
-#
-#a = {'I01':"a"}
-#
-#a['I09'] = 'b'
-#
-#a['I04'] = 'c'
-#
-#b = sorted(a)
-#
-#for i in b:
-#    print(i + ": " + a[i])
-#    
-#I01: a
-#I04: c
-#I09: b
-
-#Individuals
-#ID, Name, Gender, Birthday, Age, Alive, Death, Child, Spouse
-
-#Families
-#ID, Married, Divorced, Husband ID, Wife ID, Wife Name, Children (ID in a list)
-
-#FAMS: Husband or Wife
-#FAMC: Children
-# _CURRENT Y->Divorce NA   N->Divorce/Death
-
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
 FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
