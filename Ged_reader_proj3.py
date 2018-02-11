@@ -37,7 +37,7 @@ from prettytable import PrettyTable
 # _CURRENT Y->Divorce NA   N->Divorce/Death
 
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
-FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL']
+FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
 MONTH = {"JAN": "01", "FEB": "02", "MAR": "03", "APR": "04", "MAY": "05", "JUN": "06"
          , "JUL": "07", "AUG": "08", "SEP": "09", "OCT": "10", "NOV": "11", "DEC": "12"}
@@ -45,35 +45,35 @@ NOW_YEAR = 2018
 NOW_MONTH = 2
 NOW_DAY = 10
 
-#class Individual:
-#    def __init__(self, ID, name, gender, dob, age, alive, death, child, spouse):
-#        self.ID = ID  #string
-#        self.name = name  #string
-#        self.gender = gender  #string
-#        self.dob = dob  #string
-#        self.age = age  #string
-#        self.alive = alive  #bool
-#        self.death = death  #string
-#        self.child = child  #list
-#        self.spouse = spouse  #list
+class Individual:
+    def __init__(self, ID, name, gender, dob, age, alive, death, child, spouse):
+        self.ID = ID  #string
+        self.name = name  #string
+        self.gender = gender  #string
+        self.dob = dob  #string
+        self.age = age  #string
+        self.alive = alive  #bool
+        self.death = death  #string
+        self.child = child  #list
+        self.spouse = spouse  #list
+
 #
-#
-#class Family:
-#    def __init__(self, ID, married, divorced, husb_id, husb_name, wife_id, wife_name, children):
-#        self.ID = ID  #string
-#        self.married =  married  #string
-#        self.divorced = divorced  #string "Yes" / "NA"
-#        self.husb_id = husb_id  #string
-#        self.husb_name = husb_name  #string
-#        self.wife_id = wife_id  #string
-#        self.wife_name = wife_name  #string
-#        self.children = children  #list
+class Family:
+    def __init__(self, ID, married, divorced, husb_id, husb_name, wife_id, wife_name, children):
+        self.ID = ID  #string
+        self.married =  married  #string
+        self.divorced = divorced  #string "Yes" / "NA"
+        self.husb_id = husb_id  #string
+        self.husb_name = husb_name  #string
+        self.wife_id = wife_id  #string
+        self.wife_name = wife_name  #string
+        self.children = children  #list
 
 
 def new_indi():
     indi = {
             "ID": "",  "name": "",  "gender": "",  "dob": "",  "age": "",  "alive": True,
-            "death": "",  "child": list(), "spouse": "NA"
+            "death": "",  "child": "NA", "spouse": "NA"
             }
     return indi
 
@@ -87,7 +87,7 @@ def create_indi(tmp_indi):
 def new_fam():
     fam = {
             "ID": "",  "married": "",  "divorced": "",  "husb_id": "",  "husb_name": "",  "wife_id": "",
-             "wife_name": "",  "children": list()
+             "wife_name": "",  "children": {}
             }
     return fam
 
@@ -100,9 +100,7 @@ def create_fam(tmp_fam):
 
 def read_indi(indi_lst):
     indi_dict = dict()
-#    famc_dict = dict(list())
-#    fams_dict = dict(list())
-    
+ 
     for indi in indi_lst:
         tmp_indi = new_indi()
         
@@ -145,43 +143,30 @@ def read_indi(indi_lst):
                 if len(day) < 2:
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
-                year = wordlst[4]
-                tmp_indi['dob'] = year + "-" + month + "-" + day
+                birtyear = wordlst[4]
+                tmp_indi['dob'] = birtyear + "-" + month + "-" + day
                 
-                age = int(NOW_YEAR - int(year))
-                if NOW_MONTH >= int(month):
-                    if NOW_DAY >= int(day):
-                        age = age - 1
-                tmp_indi['age'] = str(age)
-                
+                if int(birtyear) > NOW_YEAR:
+                    age = "NA"
+                else:
+                    age = int(NOW_YEAR - int(birtyear))
+                tmp_indi['age'] = str(age)   
             elif datetag == "DEAT":
                 day = wordlst[2]
                 if len(day) < 2:
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
-                year = wordlst[4]
-                tmp_indi['death'] = year + "-" + month + "-" + day
-            
-#            if wordlst[1] == "FAMS":
-#                fam_id = wordlst[2].split("@")[1].strip()
-#                if fams_dict.get(fam_id, list()):
-#                    fams_dict[fam_id].append(tmp_indi.get("ID"))
-#                else:
-#                    fams_dict[fam_id] = [tmp_indi.get("ID")]
-#            
-#            if wordlst[1] == "FAMC":
-#                fam_id = wordlst[2].split("@")[1].strip()
-#                if famc_dict.get(fam_id, list()):
-#                    famc_dict[fam_id].append(tmp_indi.get("ID"))
-#                else:
-#                    famc_dict[fam_id] = [tmp_indi.get("ID")]
-        
+                deatyear = wordlst[4]
+                tmp_indi['death'] = deatyear + "-" + month + "-" + day    
+                
+                age = int(deatyear)-int(birtyear)
+                tmp_indi['age'] = str(age)
+
         if tmp_indi.get("death") == "":
             tmp_indi["death"] = "NA"
             
         indi_dict[tmp_indi["ID"]] = tmp_indi
         
-#    return indi_dict, fams_dict, famc_dict
     return indi_dict
 
                                         
@@ -218,16 +203,41 @@ def read_fam(fam_lst, indi_dict):
             if wordlst[1] == "CHIL":
                 child_id = wordlst[2].split("@")[1].strip()
 #                print(child_id)
-                if tmp_fam.get("children", list()):
-                    tmp_fam["children"].append(child_id)
+                if tmp_fam.get("children"):
+                    
+                    tmp_fam["children"].add(child_id)
                 else:
-                    tmp_fam["children"] = [child_id]
+                    tmp_fam["children"] = {child_id}
+                    
+            if wordlst[1] == "MARR":
+                datetag = "MARR"
+                continue
+            elif wordlst[1] == "DIV":
+                datetag = "DIV"
+                continue
+            elif wordlst[1] != "DATE":
+                datetag = ""
                 
-                
-            if wordlst[1] == "_CURRENT":
-                if wordlst[2] == "Y":
+            if datetag == "MARR":
+                day = wordlst[2]
+                if len(day) < 2:
+                    day = "0" + day
+                month = MONTH.get(wordlst[3], "")
+                marryear = wordlst[4]
+                tmp_fam['married'] = marryear + "-" + month + "-" + day 
+               
+            
+            elif datetag == "DIV":
+                day = wordlst[2]
+                if len(day) < 2:
+                    day = "0" + day
+                month = MONTH.get(wordlst[3], "")
+                divyear = wordlst[4]
+                tmp_fam['divorced'] = divyear + "-" + month + "-" + day 
+           
+            if tmp_fam.get("divorced") == "":
                     tmp_fam['divorced'] = "NA"
-        
+
         fam_dict[tmp_fam["ID"]] = tmp_fam
         
         
@@ -240,15 +250,14 @@ def re_read_dicts(indi_dict, fam_dict):
         husb_id = fam_dict[key]['husb_id']
         wife_id = fam_dict[key]['wife_id']
         children = fam_dict[key]["children"]
-        indi_dict[husb_id]['spouse'] = wife_id
-        indi_dict[husb_id]['child'] = children
+        indi_dict[husb_id]['spouse'] = "{'"+key+"'}"
+        indi_dict[wife_id]['spouse'] = "{'"+key+"'}"
         
-        indi_dict[wife_id]['spouse'] = husb_id
-        indi_dict[wife_id]['child'] = children
+        for chld in children:
+            indi_dict[chld]['child'] = "{'"+key+"'}"
         
         
     return indi_dict, fam_dict
-
 
 
 def run(filename):
@@ -340,7 +349,7 @@ if __name__ == "__main__":
     for key in indi_dict:
         indi = indi_dict[key]
         x.add_row([indi["ID"], indi["name"], indi["gender"], indi["dob"], indi["age"], indi["alive"]
-        , indi["death"], indi["child"], "{ "+indi["spouse"]+" }"])
+        , indi["death"], indi["child"], ""+indi["spouse"]+""])
     print (x)
     
     print("")
@@ -350,7 +359,7 @@ if __name__ == "__main__":
                      'Wife ID', 'Wife Name', 'Children']
     for key in fam_dict:
         fam = fam_dict[key]
-        x.add_row([fam["ID"], "NA", fam["divorced"], fam["husb_id"], fam["husb_name"], 
+        x.add_row([fam["ID"], fam["married"], fam["divorced"], fam["husb_id"], fam["husb_name"], 
                   fam["wife_id"], fam["wife_name"], fam["children"]])
     print (x)
     
