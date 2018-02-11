@@ -59,7 +59,7 @@ def create_indi(tmp_indi):
 def new_fam():
     fam = {
             "ID": "",  "married": "",  "divorced": "",  "husb_id": "",  "husb_name": "",  "wife_id": "",
-             "wife_name": "",  "children": {}
+             "wife_name": "",  "children": set()
             }
     return fam
 
