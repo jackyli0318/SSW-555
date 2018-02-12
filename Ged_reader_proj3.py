@@ -59,7 +59,7 @@ def create_indi(tmp_indi):
 def new_fam():
     fam = {
             "ID": "",  "married": "",  "divorced": "",  "husb_id": "",  "husb_name": "",  "wife_id": "",
-             "wife_name": "",  "children": set()
+             "wife_name": "",  "children": {}
             }
     return fam
 
@@ -302,11 +302,12 @@ def run(filename):
         fam_dict = read_fam(fam_lst, indi_dict)
         indi_dict, fam_dict = re_read_dicts(indi_dict, fam_dict)
         
-        print(indi_dict)
-        print("")
-        print(fam_dict)
-        print("")
+#        print(indi_dict)
+#        print("")
+#        print(fam_dict)
+#        print("")
         
+        f.close()
         return indi_dict, fam_dict
             
             
