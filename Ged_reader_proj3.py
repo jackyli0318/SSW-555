@@ -29,6 +29,19 @@ class Individual:
         self.child = child  #list
         self.spouse = spouse  #list
 
+def check_date(year,month,day):
+    if year > NOW_YEAR or (year == NOW_YEAR and month > NOW_MONTH) or (year == NOW_YEAR and month == NOW_MONTH and day > NOW_DAY):
+        return False
+    else:
+        return True
+
+def check_married(indi_dict,ID,month,day,marry_year):
+    marry_year=int(marry_year)
+    dob=indi_dict[ID]["dob"].split('-')
+    if marry_year-int(dob[0])<=14 or marry_year-int(dob[0])<0:
+        return False
+    else:
+        return True
 #
 class Family:
     def __init__(self, ID, married, divorced, husb_id, husb_name, wife_id, wife_name, children):
@@ -40,7 +53,6 @@ class Family:
         self.wife_id = wife_id  #string
         self.wife_name = wife_name  #string
         self.children = children  #list
-
 
 def new_indi():
     indi = {
@@ -116,12 +128,13 @@ def read_indi(indi_lst):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 birtyear = wordlst[4]
-                tmp_indi['dob'] = birtyear + "-" + month + "-" + day
                 
-                if int(birtyear) > NOW_YEAR:
+                if check_date(int(birtyear),int(month),int(day))==False:
                     age = "NA"
+                    tmp_indi['dob'] = "NA"
                 else:
                     age = int(NOW_YEAR - int(birtyear))
+                    tmp_indi['dob'] = birtyear + "-" + month + "-" + day
                 tmp_indi['age'] = str(age)   
             elif datetag == "DEAT":
                 day = wordlst[2]
@@ -129,9 +142,13 @@ def read_indi(indi_lst):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 deatyear = wordlst[4]
-                tmp_indi['death'] = deatyear + "-" + month + "-" + day    
-                
-                age = int(deatyear)-int(birtyear)
+                                
+                if check_date(int(deatyear),int(month),int(day))==False:
+                    age = "NA"
+                    tmp_indi['death'] = "NA"   
+                else:
+                    age = int(deatyear)-int(birtyear)
+                    tmp_indi['death'] = deatyear + "-" + month + "-" + day    
                 tmp_indi['age'] = str(age)
 
         if tmp_indi.get("death") == "":
@@ -196,7 +213,11 @@ def read_fam(fam_lst, indi_dict):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 marryear = wordlst[4]
-                tmp_fam['married'] = marryear + "-" + month + "-" + day 
+                if check_date(int(marryear),int(month),int(day))==False or check_married(indi_dict,wife_id,month,day,marryear)==False\
+                or check_married(indi_dict,husb_id,month,day,marryear)==False:
+                    tmp_fam['married'] = "NA"
+                else:
+                    tmp_fam['married'] = marryear + "-" + month + "-" + day 
                
             
             elif datetag == "DIV":
@@ -205,7 +226,10 @@ def read_fam(fam_lst, indi_dict):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 divyear = wordlst[4]
-                tmp_fam['divorced'] = divyear + "-" + month + "-" + day 
+                if check_date(int(divyear),int(month),int(day))==False:
+                    tmp_fam['divorced'] = "NA"
+                else:
+                    tmp_fam['divorced'] = divyear + "-" + month + "-" + day 
            
             if tmp_fam.get("divorced") == "":
                     tmp_fam['divorced'] = "NA"
