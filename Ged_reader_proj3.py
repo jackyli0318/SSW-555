@@ -15,7 +15,7 @@ MONTH = {"JAN": "01", "FEB": "02", "MAR": "03", "APR": "04", "MAY": "05", "JUN":
          , "JUL": "07", "AUG": "08", "SEP": "09", "OCT": "10", "NOV": "11", "DEC": "12"}
 NOW_YEAR = 2018
 NOW_MONTH = 2
-NOW_DAY = 10
+NOW_DAY = 18
 
 class Individual:
     def __init__(self, ID, name, gender, dob, age, alive, death, child, spouse):
@@ -30,7 +30,11 @@ class Individual:
         self.spouse = spouse  #list
 
 def check_date(year,month,day):
-    if year > NOW_YEAR or (year == NOW_YEAR and month > NOW_MONTH) or (year == NOW_YEAR and month == NOW_MONTH and day > NOW_DAY):
+    if type(year)!=int or type(month)!=int or type(day)!=int:
+        return False
+    elif year < 0 or month > 12 or month <0 or day>31 or day<0:
+        return False
+    elif year > NOW_YEAR or (year == NOW_YEAR and month > NOW_MONTH) or (year == NOW_YEAR and month == NOW_MONTH and day > NOW_DAY):
         return False
     else:
         return True
