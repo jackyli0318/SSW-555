@@ -5,7 +5,7 @@ Created on Sat Feb 10 23:11:59 2018
 
 @author: jackylee
 """
-
+from sprint1 import check_date, check_married, get_age
 from prettytable import PrettyTable
 
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
@@ -13,9 +13,6 @@ FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
 MONTH = {"JAN": "01", "FEB": "02", "MAR": "03", "APR": "04", "MAY": "05", "JUN": "06"
          , "JUL": "07", "AUG": "08", "SEP": "09", "OCT": "10", "NOV": "11", "DEC": "12"}
-NOW_YEAR = 2018
-NOW_MONTH = 2
-NOW_DAY = 18
 
 class Individual:
     def __init__(self, ID, name, gender, dob, age, alive, death, child, spouse):
@@ -29,24 +26,7 @@ class Individual:
         self.child = child  #list
         self.spouse = spouse  #list
 
-def check_date(year,month,day):
-    if type(year)!=int or type(month)!=int or type(day)!=int:
-        return False
-    elif year < 0 or month > 12 or month <0 or day>31 or day<0:
-        return False
-    elif year > NOW_YEAR or (year == NOW_YEAR and month > NOW_MONTH) or (year == NOW_YEAR and month == NOW_MONTH and day > NOW_DAY):
-        return False
-    else:
-        return True
 
-def check_married(indi_dict,ID,month,day,marry_year):
-    marry_year=int(marry_year)
-    dob=indi_dict[ID]["dob"].split('-')
-    if marry_year-int(dob[0])<=14 or marry_year-int(dob[0])<0:
-        return False
-    else:
-        return True
-#
 class Family:
     def __init__(self, ID, married, divorced, husb_id, husb_name, wife_id, wife_name, children):
         self.ID = ID  #string
@@ -137,8 +117,8 @@ def read_indi(indi_lst):
                     age = "NA"
                     tmp_indi['dob'] = "NA"
                 else:
-                    age = int(NOW_YEAR - int(birtyear))
                     tmp_indi['dob'] = birtyear + "-" + month + "-" + day
+                    age = get_age(tmp_indi['dob'])
                 tmp_indi['age'] = str(age)   
             elif datetag == "DEAT":
                 day = wordlst[2]
@@ -151,8 +131,9 @@ def read_indi(indi_lst):
                     age = "NA"
                     tmp_indi['death'] = "NA"   
                 else:
-                    age = int(deatyear)-int(birtyear)
-                    tmp_indi['death'] = deatyear + "-" + month + "-" + day    
+                    tmp_indi['death'] = deatyear + "-" + month + "-" + day
+                    age = get_age(tmp_indi['dob'], tmp_indi['death'])
+                
                 tmp_indi['age'] = str(age)
 
         if tmp_indi.get("death") == "":
