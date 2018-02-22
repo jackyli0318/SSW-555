@@ -21,31 +21,22 @@ def check_date(date):
 def Birth_Before_Parent_Death(cbirth,hdeath,wdeath):
     #children birth year, month and day
     if cbirth != "NA":
-        cbirthyr = int(cbirth.split("-")[0])
-        cbirthmon = int(cbirth.split("-")[1])
-        cbirthday = int(cbirth.split("-")[2])
         if check_date(cbirth)==True:
-            cbirthdate = datetime.date(cbirthyr,cbirthmon,cbirthday)
+            cbirthdate = datetime.datetime.strptime(cbirth,"%Y-%m-%d")
         else:
             return False
             
     #husband death year, month and day
     if hdeath != "NA":
-        hdeathyr = int(hdeath.split("-")[0])
-        hdeathmon = int(hdeath.split("-")[1])
-        hdeathday = int(hdeath.split("-")[2])
         if check_date(hdeath)==True:
-            hdeathdate = datetime.date(hdeathyr,hdeathmon,hdeathday)
+            hdeathdate = datetime.datetime.strptime(hdeath,"%Y-%m-%d")
         else:
             return False
             
     #wife death year, month and day
     if wdeath != "NA":
-        wdeathyr = int(wdeath.split("-")[0])
-        wdeathmon = int(wdeath.split("-")[1])
-        wdeathday = int(wdeath.split("-")[2])
         if check_date(wdeath)==True:
-            wdeathdate = datetime.date(wdeathyr,wdeathmon,wdeathday)
+            wdeathdate = datetime.datetime.strptime(wdeath,"%Y-%m-%d")
         else:
             return False
 
