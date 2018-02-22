@@ -78,9 +78,12 @@ def get_age(start, end=NOW):
     return age
     
 
-
-
-
+def check_unique(SET, ID):
+    if ID in SET:
+        return False, SET
+    else:
+        SET.add(ID)
+        return True, SET
 
 
 

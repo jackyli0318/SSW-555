@@ -5,7 +5,7 @@ Created on Sat Feb 10 23:11:59 2018
 
 @author: jackylee
 """
-from sprint1 import check_date, check_married, get_age
+from sprint1 import check_date, check_married, get_age, check_unique
 from prettytable import PrettyTable
 
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
@@ -13,6 +13,7 @@ FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
 MONTH = {"JAN": "01", "FEB": "02", "MAR": "03", "APR": "04", "MAY": "05", "JUN": "06"
          , "JUL": "07", "AUG": "08", "SEP": "09", "OCT": "10", "NOV": "11", "DEC": "12"}
+
 
 class Individual:
     def __init__(self, ID, name, gender, dob, age, alive, death, child, spouse):
@@ -68,6 +69,8 @@ def create_fam(tmp_fam):
 
 def read_indi(indi_lst):
     indi_dict = dict()
+    
+    INDI_SET = set()
  
     for indi in indi_lst:
         tmp_indi = new_indi()
@@ -81,8 +84,15 @@ def read_indi(indi_lst):
                 wordlst[2] = wordlst[1]
                 wordlst[1] = tmp
             
+            # if id is not unique, we will add ** at the end of the ID for checking
             if wordlst[1] == "INDI":
-                tmp_indi['ID'] = wordlst[2].split("@")[1]
+                tmpID = wordlst[2].split("@")[1]
+                tmpbool, INDI_SET = check_unique(INDI_SET, wordlst[2])
+                if tmpbool:
+                    tmp_indi['ID'] = tmpID
+                else:
+                    tmp_indi['ID'] = tmpID + "**"
+                    print(tmpID+": not unique!")
                 continue
             
             if wordlst[1] == "NAME":
@@ -147,6 +157,7 @@ def read_indi(indi_lst):
             
 def read_fam(fam_lst, indi_dict):
     fam_dict = dict()
+    FAM_SET = set()
     
     for fam in fam_lst:
         tmp_fam = new_fam()
@@ -160,8 +171,15 @@ def read_fam(fam_lst, indi_dict):
                 wordlst[2] = wordlst[1]
                 wordlst[1] = tmp
             
+            # if id is not unique, we will add ** at the end of the ID for checking
             if wordlst[1] == "FAM":
-                tmp_fam['ID'] = wordlst[2].split("@")[1]
+                tmpID = wordlst[2].split("@")[1]
+                tmpbool, FAM_SET = check_unique(FAM_SET, wordlst[2])
+                if tmpbool:
+                    tmp_fam['ID'] = tmpID
+                else:
+                    tmp_fam['ID'] = tmpID + "**"
+                    print(tmpID+": not unique!")
                 continue
             
             if wordlst[1] == "HUSB":
