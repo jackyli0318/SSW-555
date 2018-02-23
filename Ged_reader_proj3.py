@@ -5,7 +5,8 @@ Created on Sat Feb 10 23:11:59 2018
 
 @author: jackylee
 """
-from sprint1 import check_date, check_married, get_age, check_unique
+from sprint1 import check_date, check_married, check_unique
+from sprint2 import get_age, check_divorced
 from prettytable import PrettyTable
 
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
@@ -143,7 +144,6 @@ def read_indi(indi_lst):
                 else:
                     tmp_indi['death'] = deatyear + "-" + month + "-" + day
                     age = get_age(tmp_indi['dob'], tmp_indi['death'])
-                
                 tmp_indi['age'] = str(age)
 
         if tmp_indi.get("death") == "":
@@ -216,8 +216,8 @@ def read_fam(fam_lst, indi_dict):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 marryear = wordlst[4]
-                if check_date(int(marryear),int(month),int(day))==False or check_married(indi_dict,wife_id,month,day,marryear)==False\
-                or check_married(indi_dict,husb_id,month,day,marryear)==False:
+                if check_date(int(marryear),int(month),int(day))==False or check_married(indi_dict,wife_id,int(month),int(day),int(marryear))==False\
+                or check_married(indi_dict,husb_id,int(month),int(day),int(marryear))==False:
                     tmp_fam['married'] = "NA"
                 else:
                     tmp_fam['married'] = marryear + "-" + month + "-" + day 
@@ -229,7 +229,8 @@ def read_fam(fam_lst, indi_dict):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 divyear = wordlst[4]
-                if check_date(int(divyear),int(month),int(day))==False:
+                if check_date(int(divyear),int(month),int(day))==False or check_divorced(indi_dict,wife_id,int(month),int(day),int(divyear))==False\
+                or check_divorced(indi_dict,husb_id,int(month),int(day),int(divyear))==False:
                     tmp_fam['divorced'] = "NA"
                 else:
                     tmp_fam['divorced'] = divyear + "-" + month + "-" + day 

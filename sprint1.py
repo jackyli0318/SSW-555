@@ -28,7 +28,15 @@ def check_date(year,month,day):
 def check_married(indi_dict,ID,month,day,marry_year):
     marry_year=int(marry_year)
     dob=indi_dict[ID]["dob"].split('-')
-    if marry_year-int(dob[0])<=14 or marry_year-int(dob[0])<0:
+    
+    marry_age = marry_year - int(dob[0])
+    #print(marry_age)
+    if month > int(dob[1]):
+        marry_age = marry_age - 1
+    elif month == int(dob[1]):
+        if day > int(dob[2]):
+            marry_age = marry_age - 1
+    if marry_age<=14 or marry_age<0:
         return False
     else:
         return True
