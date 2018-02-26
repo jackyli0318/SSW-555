@@ -5,14 +5,33 @@ Created on Sat Feb 10 23:11:59 2018
 
 @author: jackylee
 """
-from sprint1 import check_date, check_married, get_age, check_unique
+from sprint1 import check_date, check_married, get_age, check_unique, birth_before_parent_death, check_gender
 from prettytable import PrettyTable
 
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
 FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
+ERROR_TYPE = {"I": "INDIVIDUAL", "F": "FAMILY"}
+
 MONTH = {"JAN": "01", "FEB": "02", "MAR": "03", "APR": "04", "MAY": "05", "JUN": "06"
          , "JUL": "07", "AUG": "08", "SEP": "09", "OCT": "10", "NOV": "11", "DEC": "12"}
+
+ERROR_LST = list()
+
+
+def new_error(typ, us_num, ID, msg):
+    error_msg = "ERROR: " + typ + ": " + us_num + ": " + ID + ": " + msg 
+    return error_msg
+    
+
+def add_error(error_msg):
+    ERROR_LST.append(error_msg)
+
+
+def print_error(error_lst):
+    print("\nErrors:")
+    for error in error_lst:
+        print(error)
 
 
 class Individual:
@@ -92,7 +111,9 @@ def read_indi(indi_lst):
                     tmp_indi['ID'] = tmpID
                 else:
                     tmp_indi['ID'] = tmpID + "**"
-                    print(tmpID+": not unique!")
+                    error_msg = tmpID+": not unique!"
+                    error_msg = new_error(ERROR_TYPE['I'], "22", tmp_indi['ID'], error_msg)
+                    add_error(error_msg)
                 continue
             
             if wordlst[1] == "NAME":
@@ -122,29 +143,45 @@ def read_indi(indi_lst):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 birtyear = wordlst[4]
+                birthday = birtyear + "-" + month + "-" + day
                 
-                if check_date(int(birtyear),int(month),int(day))==False:
-                    age = "NA"
+                if check_date(birthday)==False:
                     tmp_indi['dob'] = "NA"
+                    error_msg = "Birthday " + birthday + " is impossible!"
+                    error_msg = new_error(ERROR_TYPE['I'], "01", tmp_indi['ID'], error_msg)
+                    add_error(error_msg)
                 else:
                     tmp_indi['dob'] = birtyear + "-" + month + "-" + day
-                    age = get_age(tmp_indi['dob'])
-                tmp_indi['age'] = str(age)   
+                    
+                age = get_age(tmp_indi['dob']) 
+                if age == "NA":
+                    error_msg = "Age of " + tmp_indi['ID'] + " is impossible!"
+                    error_msg = new_error(ERROR_TYPE['I'], "27", tmp_indi['ID'], error_msg)
+                    add_error(error_msg)
+                tmp_indi['age'] = age
+                
             elif datetag == "DEAT":
                 day = wordlst[2]
                 if len(day) < 2:
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 deatyear = wordlst[4]
-                                
-                if check_date(int(deatyear),int(month),int(day))==False:
-                    age = "NA"
-                    tmp_indi['death'] = "NA"   
-                else:
-                    tmp_indi['death'] = deatyear + "-" + month + "-" + day
-                    age = get_age(tmp_indi['dob'], tmp_indi['death'])
+                deathdate = deatyear + "-" + month + "-" + day
                 
-                tmp_indi['age'] = str(age)
+                if check_date(deathdate)==False:
+                    tmp_indi['death'] = "NA"
+                    error_msg = "Death " + deathdate + " is impossible!"
+                    error_msg = new_error(ERROR_TYPE['I'], "01", tmp_indi['ID'], error_msg)
+                    add_error(error_msg)
+                else:
+                    tmp_indi['death'] = deathdate
+                
+                age = get_age(tmp_indi['dob'], tmp_indi['death'])
+                if age == "NA":
+                    error_msg = "Age of " + tmp_indi['ID'] + " is impossible!"
+                    error_msg = new_error(ERROR_TYPE['I'], "27", tmp_indi['ID'], error_msg)
+                    add_error(error_msg)
+                tmp_indi['age'] = age
 
         if tmp_indi.get("death") == "":
             tmp_indi["death"] = "NA"
@@ -179,7 +216,9 @@ def read_fam(fam_lst, indi_dict):
                     tmp_fam['ID'] = tmpID
                 else:
                     tmp_fam['ID'] = tmpID + "**"
-                    print(tmpID+": not unique!")
+                    error_msg = tmpID+": not unique!"
+                    error_msg = new_error(ERROR_TYPE['F'], "22", tmp_fam['ID'], error_msg)
+                    add_error(error_msg)
                 continue
             
             if wordlst[1] == "HUSB":
@@ -216,9 +255,22 @@ def read_fam(fam_lst, indi_dict):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 marryear = wordlst[4]
-                if check_date(int(marryear),int(month),int(day))==False or check_married(indi_dict,wife_id,month,day,marryear)==False\
-                or check_married(indi_dict,husb_id,month,day,marryear)==False:
+                marrdate = marryear + "-" + month + "-" + day 
+                
+                h_birth = indi_dict[tmp_fam['husb_id']].get('dob', "NA")
+                w_birth = indi_dict[tmp_fam['wife_id']].get('dob', "NA")
+                
+                if check_date(marrdate)==False:
                     tmp_fam['married'] = "NA"
+                    error_msg = "Marriage " + marrdate + " is impossible!"
+                    error_msg = new_error(ERROR_TYPE['F'], "01", tmp_fam['ID'], error_msg)
+                    add_error(error_msg)
+
+                elif check_married(h_birth, marrdate)==False or check_married(w_birth, marrdate)==False:
+                    tmp_fam['married'] = "NA"
+                    error_msg = "Marriage " + marrdate + " should occur before the birth of both husband and wife!"
+                    error_msg = new_error(ERROR_TYPE['F'], "02", tmp_fam['ID'], error_msg)
+                    add_error(error_msg)
                 else:
                     tmp_fam['married'] = marryear + "-" + month + "-" + day 
                
@@ -229,10 +281,15 @@ def read_fam(fam_lst, indi_dict):
                     day = "0" + day
                 month = MONTH.get(wordlst[3], "")
                 divyear = wordlst[4]
-                if check_date(int(divyear),int(month),int(day))==False:
+                divdate = divyear + "-" + month + "-" + day 
+                
+                if check_date(divdate)==False:
                     tmp_fam['divorced'] = "NA"
+                    error_msg = "Divorce " + divdate + " is impossible!"
+                    error_msg = new_error(ERROR_TYPE['F'], "01", tmp_fam['ID'], error_msg)
+                    add_error(error_msg)
                 else:
-                    tmp_fam['divorced'] = divyear + "-" + month + "-" + day 
+                    tmp_fam['divorced'] = divdate
            
             if tmp_fam.get("divorced") == "":
                     tmp_fam['divorced'] = "NA"
@@ -246,14 +303,29 @@ def read_fam(fam_lst, indi_dict):
 def re_read_dicts(indi_dict, fam_dict):
 #    spouse
     for key in fam_dict:
+        
         husb_id = fam_dict[key]['husb_id']
         wife_id = fam_dict[key]['wife_id']
         children = fam_dict[key]["children"]
         indi_dict[husb_id]['spouse'] = "{'"+key+"'}"
         indi_dict[wife_id]['spouse'] = "{'"+key+"'}"
         
+        hdeath = indi_dict[husb_id]["death"]
+        wdeath = indi_dict[husb_id]["death"]
+        
         for chld in children:
             indi_dict[chld]['child'] = "{'"+key+"'}"
+            
+            cbirth = indi_dict[chld]['dob']
+            if not birth_before_parent_death(cbirth,hdeath,wdeath):
+                error_msg = "The birth of " + chld + " should occur before the death of his/her parents!"
+                error_msg = new_error(ERROR_TYPE['F'], "09", key, error_msg)
+                add_error(error_msg)
+                
+        if not check_gender(key, fam_dict, indi_dict):
+            error_msg = "Current gender for the role of family " + key + " is wrong!"
+            error_msg = new_error(ERROR_TYPE['F'], "21", key, error_msg)
+            add_error(error_msg)
         
         
     return indi_dict, fam_dict
@@ -342,6 +414,7 @@ def run(filename):
 if __name__ == "__main__":
     
     indi_dict, fam_dict = run('Family.ged')
+#    indi_dict, fam_dict = run('bugFamily.ged')
     
     print("Individuals")
     x = PrettyTable()
@@ -363,6 +436,7 @@ if __name__ == "__main__":
                   fam["wife_id"], fam["wife_name"], fam["children"]])
     print (x)
     
+    print_error(ERROR_LST)
     
         
         
