@@ -20,7 +20,7 @@ ERROR_LST = list()
 
 
 def new_error(typ, us_num, ID, msg):
-    error_msg = "ERROR: " + typ + ": " + us_num + ": " + ID + ": " + msg 
+    error_msg = "ERROR: " + typ + " US: " + us_num + ": " + ID + ": " + msg 
     return error_msg
     
 
