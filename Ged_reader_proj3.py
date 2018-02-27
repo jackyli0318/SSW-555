@@ -29,9 +29,12 @@ def add_error(error_msg):
 
 
 def print_error(error_lst):
-    print("\nErrors:")
-    for error in error_lst:
-        print(error)
+    if ERROR_LST:
+        print("\nErrors:")
+        for error in error_lst:
+            print(error)
+    else:
+        print("All good!")
 
 
 class Individual:
@@ -155,7 +158,7 @@ def read_indi(indi_lst):
                     
                 age = get_age(tmp_indi['dob']) 
                 if age == "NA":
-                    error_msg = "Age of " + tmp_indi['ID'] + " is impossible!"
+                    error_msg = "Age of " + tmp_indi['ID'] + " " + birthday + " is impossible!"
                     error_msg = new_error(ERROR_TYPE['I'], "27", tmp_indi['ID'], error_msg)
                     add_error(error_msg)
                 tmp_indi['age'] = age
@@ -268,7 +271,7 @@ def read_fam(fam_lst, indi_dict):
 
                 elif check_married(h_birth, marrdate)==False or check_married(w_birth, marrdate)==False:
                     tmp_fam['married'] = "NA"
-                    error_msg = "Marriage " + marrdate + " should occur before the birth of both husband and wife!"
+                    error_msg = "Marriage " + marrdate + " should occur after the birth of both husband and wife!"
                     error_msg = new_error(ERROR_TYPE['F'], "02", tmp_fam['ID'], error_msg)
                     add_error(error_msg)
                 else:
@@ -311,12 +314,13 @@ def re_read_dicts(indi_dict, fam_dict):
         indi_dict[wife_id]['spouse'] = "{'"+key+"'}"
         
         hdeath = indi_dict[husb_id]["death"]
-        wdeath = indi_dict[husb_id]["death"]
+        wdeath = indi_dict[wife_id]["death"]
         
         for chld in children:
             indi_dict[chld]['child'] = "{'"+key+"'}"
             
             cbirth = indi_dict[chld]['dob']
+            
             if not birth_before_parent_death(cbirth,hdeath,wdeath):
                 error_msg = "The birth of " + chld + " should occur before the death of his/her parents!"
                 error_msg = new_error(ERROR_TYPE['F'], "09", key, error_msg)
@@ -413,8 +417,8 @@ def run(filename):
         
 if __name__ == "__main__":
     
-    indi_dict, fam_dict = run('Family.ged')
-#    indi_dict, fam_dict = run('bugFamily.ged')
+#    indi_dict, fam_dict = run('Family.ged')
+    indi_dict, fam_dict = run('bugFamily.ged')
     
     print("Individuals")
     x = PrettyTable()
