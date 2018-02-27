@@ -31,8 +31,8 @@ Families
 | ID |  Married   |  Divorced  | Husband ID | Husband Name | Wife ID |   Wife Name   |       Children      |
 +----+------------+------------+------------+--------------+---------+---------------+---------------------+
 | F1 |     NA     | 2017-05-10 |     I1     | Jacky /Lee/  |    I6   |  Emma /Guo/   |        {'I5'}       |
-| F2 | 1988-06-18 |     NA     |     I3     | Jack /Lee/   |    I2   | Sophie /Goo/  | {'I14', 'I1', 'I4'} |
-| F3 |     NA     | 1987-08-08 |    I17     | Zhazha /St/  |    I3   |  Jack /Lee/   |    {'I18', 'I21'}   |
+| F2 | 1988-06-18 |     NA     |     I3     | Jack /Lee/   |    I2   | Sophie /Goo/  | {'I1', 'I14', 'I4'} |
+| F3 |     NA     | 1987-08-08 |    I17     | Zhazha /St/  |    I3   |  Jack /Lee/   |    {'I21', 'I18'}   |
 | F4 |     NA     |     NA     |     I8     | Mody /Lee/   |    I7   |  Lucy /Chan/  |        {'I3'}       |
 | F5 | 1992-12-12 |     NA     |    I15     |  LS /Guo/    |   I16   |   LH /Guan/   |        {'I6'}       |
 | F6 | 1915-10-10 |     NA     |     I9     | Mike /Lee/   |   I10   |  Ricky /Wei/  |    {'I11', 'I8'}    |
@@ -41,12 +41,12 @@ Families
 +----+------------+------------+------------+--------------+---------+---------------+---------------------+
 
 Errors:
-ERROR: INDIVIDUAL: 01: I1: Birthday 2020-01-16 is impossible!
-ERROR: INDIVIDUAL: 27: I1: Age of I1 2020-01-16 is impossible!
-ERROR: INDIVIDUAL: 01: I6: Birthday 1995-02-30 is impossible!
-ERROR: INDIVIDUAL: 27: I6: Age of I6 1995-02-30 is impossible!
-ERROR: FAMILY: 02: F1: Marriage 2013-04-04 should occur after the birth of both husband and wife!
-ERROR: FAMILY: 02: F3: Marriage 1983-07-07 should occur after the birth of both husband and wife!
-ERROR: FAMILY: 02: F4: Marriage 1955-11-11 should occur after the birth of both husband and wife!
-ERROR: FAMILY: 21: F3: Current gender for the role of family F3 is wrong!
-ERROR: FAMILY: 09: F7: The birth of I22 should occur before the death of his/her parents!
+ERROR: INDIVIDUAL: US01: I1: Birthday 2020-01-16 is impossible!
+ERROR: INDIVIDUAL: US27: I1: Age of I1 2020-01-16 is impossible!
+ERROR: INDIVIDUAL: US01: I6: Birthday 1995-02-30 is impossible!
+ERROR: INDIVIDUAL: US27: I6: Age of I6 1995-02-30 is impossible!
+ERROR: FAMILY: US02: F1: Marriage 2013-04-04 should occur after the birth of both husband and wife!
+ERROR: FAMILY: US02: F3: Marriage 1983-07-07 should occur after the birth of both husband and wife!
+ERROR: FAMILY: US02: F4: Marriage 1955-11-11 should occur after the birth of both husband and wife!
+ERROR: FAMILY: US21: F3: Current gender for the role of family F3 is wrong!
+ERROR: FAMILY: US09: F7: The birth of I22 should occur before the death of his/her parents!

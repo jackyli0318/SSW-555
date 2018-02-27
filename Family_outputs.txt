@@ -2,39 +2,51 @@ Individuals
 +-----+----------------+--------+------------+-----+-------+------------+--------+--------+
 |  ID |      Name      | Gender |  Birthday  | Age | Alive |   Death    | Child  | Spouse |
 +-----+----------------+--------+------------+-----+-------+------------+--------+--------+
-|  I1 |  Jacky /Lee/   |   M    | 1994-01-16 |  24 |  True |     NA     | {'F2'} | {'F1'} |
+|  I1 |  Jacky /Lee/   |   M    |     NA     |  NA |  True |     NA     | {'F2'} | {'F1'} |
 |  I2 | Sophie /Goo/   |   F    | 1970-07-18 |  47 |  True |     NA     |   NA   | {'F2'} |
 |  I3 |  Jack /Lee/    |   M    | 1960-04-05 |  57 |  True |     NA     | {'F4'} | {'F3'} |
 |  I4 |  Yoyo /Lee/    |   M    | 1990-02-06 |  28 |  True |     NA     | {'F2'} |   NA   |
 |  I5 |  CoCo /Lee/    |   F    | 2015-06-09 |  2  |  True |     NA     | {'F1'} |   NA   |
-|  I6 |  Emma /Guo/    |   F    | 1995-04-02 |  22 |  True |     NA     | {'F5'} | {'F1'} |
+|  I6 |  Emma /Guo/    |   F    |     NA     |  NA |  True |     NA     | {'F5'} | {'F1'} |
 |  I7 |  Lucy /Chan/   |   F    | 1921-03-03 |  96 |  True |     NA     |   NA   | {'F4'} |
-|  I8 |  Mody /Lee/    |   M    | 1920-02-03 |  98 |  True |     NA     | {'F6'} | {'F4'} |
+|  I8 |  Mody /Lee/    |   M    | 1960-02-03 |  58 |  True |     NA     | {'F6'} | {'F4'} |
 |  I9 |  Mike /Lee/    |   M    | 1890-02-02 |  80 | False | 1970-06-08 |   NA   | {'F6'} |
 | I10 |  Ricky /Wei/   |   F    | 1890-02-05 |  78 | False | 1968-04-06 |   NA   | {'F6'} |
-| I11 |  Tank /Lee/    |   F    | 1920-04-03 |  97 |  True |     NA     | {'F6'} | {'F8'} |
-| I12 |  Sushi /Jan/   |   M    | 1921-04-04 |  96 |  True |     NA     |   NA   | {'F9'} |
+| I11 |  Tank /Lee/    |   F    | 1920-04-03 |  39 | False | 1960-02-02 | {'F6'} | {'F8'} |
+| I12 |  Sushi /Jan/   |   M    | 1921-04-04 |  96 |  True |     NA     |   NA   | {'F7'} |
 | I13 |   Fan /Luo/    |   M    | 1917-03-03 |  23 | False | 1940-05-05 |   NA   | {'F8'} |
 | I14 | LiuLiu /Lee/   |   F    | 1992-03-05 |  25 |  True |     NA     | {'F2'} |   NA   |
 | I15 |   LS /Guo/     |   M    | 1960-02-02 |  58 |  True |     NA     |   NA   | {'F5'} |
 | I16 |   LH /Guan/    |   F    | 1969-04-04 |  48 |  True |     NA     |   NA   | {'F5'} |
-| I17 |  Zhazha /St/   |   F    | 1964-04-04 |  53 |  True |     NA     |   NA   | {'F3'} |
+| I17 |  Zhazha /St/   |   M    | 2002-04-04 |  6  | False | 2008-05-16 |   NA   | {'F3'} |
 | I18 | Haohao /Lee/   |   M    | 1986-03-03 |  31 |  True |     NA     | {'F3'} |   NA   |
-| I19 | Divorcy /Bob/  |   F    | 1930-02-02 |  88 |  True |     NA     |   NA   | {'F9'} |
+| I19 | Micheal /Lee/  |   M    | 1940-01-10 |  78 |  True |     NA     | {'F8'} |   NA   |
+| I20 | Jiajian /Lee/  |   M    | 1939-05-15 |  78 |  True |     NA     | {'F8'} |   NA   |
+| I21 | Jianjie /Lee/  |   F    | 1987-05-11 |  30 |  True |     NA     | {'F3'} |   NA   |
+| I22 |  HAHA /Jan/    |   M    | 1961-01-01 |  57 |  True |     NA     | {'F7'} |   NA   |
 +-----+----------------+--------+------------+-----+-------+------------+--------+--------+
 
 Families
-+----+------------+------------+------------+--------------+---------+----------------+---------------------+
-| ID |  Married   |  Divorced  | Husband ID | Husband Name | Wife ID |   Wife Name    |       Children      |
-+----+------------+------------+------------+--------------+---------+----------------+---------------------+
-| F1 | 2013-04-04 |     NA     |     I1     | Jacky /Lee/  |    I6   |  Emma /Guo/    |        {'I5'}       |
-| F2 | 1988-06-18 |     NA     |     I3     | Jack /Lee/   |    I2   | Sophie /Goo/   | {'I4', 'I1', 'I14'} |
-| F3 | 1983-07-07 | 1987-08-08 |     I3     | Jack /Lee/   |   I17   |  Zhazha /St/   |       {'I18'}       |
-| F4 | 1955-11-11 |     NA     |     I8     | Mody /Lee/   |    I7   |  Lucy /Chan/   |        {'I3'}       |
-| F5 | 1992-12-12 |     NA     |    I15     |  LS /Guo/    |   I16   |   LH /Guan/    |        {'I6'}       |
-| F6 | 1915-10-10 |     NA     |     I9     | Mike /Lee/   |   I10   |  Ricky /Wei/   |    {'I8', 'I11'}    |
-| F7 | 1950-05-14 |     NA     |    I12     | Sushi /Jan/  |   I11   |  Tank /Lee/    |          {}         |
-| F8 | 1938-05-05 |     NA     |    I13     |  Fan /Luo/   |   I11   |  Tank /Lee/    |          {}         |
-| F9 | 1945-01-03 | 1949-03-04 |    I12     | Sushi /Jan/  |   I19   | Divorcy /Bob/  |          {}         |
-+----+------------+------------+------------+--------------+---------+----------------+---------------------+
-All good!
++----+------------+------------+------------+--------------+---------+---------------+---------------------+
+| ID |  Married   |  Divorced  | Husband ID | Husband Name | Wife ID |   Wife Name   |       Children      |
++----+------------+------------+------------+--------------+---------+---------------+---------------------+
+| F1 |     NA     | 2017-05-10 |     I1     | Jacky /Lee/  |    I6   |  Emma /Guo/   |        {'I5'}       |
+| F2 | 1988-06-18 |     NA     |     I3     | Jack /Lee/   |    I2   | Sophie /Goo/  | {'I4', 'I14', 'I1'} |
+| F3 |     NA     | 1987-08-08 |    I17     | Zhazha /St/  |    I3   |  Jack /Lee/   |    {'I18', 'I21'}   |
+| F4 |     NA     |     NA     |     I8     | Mody /Lee/   |    I7   |  Lucy /Chan/  |        {'I3'}       |
+| F5 | 1992-12-12 |     NA     |    I15     |  LS /Guo/    |   I16   |   LH /Guan/   |        {'I6'}       |
+| F6 | 1915-10-10 |     NA     |     I9     | Mike /Lee/   |   I10   |  Ricky /Wei/  |    {'I8', 'I11'}    |
+| F7 | 1950-05-14 |     NA     |    I12     | Sushi /Jan/  |   I11   |  Tank /Lee/   |       {'I22'}       |
+| F8 | 1938-05-05 |     NA     |    I13     |  Fan /Luo/   |   I11   |  Tank /Lee/   |    {'I19', 'I20'}   |
++----+------------+------------+------------+--------------+---------+---------------+---------------------+
+
+Errors:
+ERROR: INDIVIDUAL: US01: I1: Birthday 2020-01-16 is impossible!
+ERROR: INDIVIDUAL: US27: I1: Age of I1 2020-01-16 is impossible!
+ERROR: INDIVIDUAL: US01: I6: Birthday 1995-02-30 is impossible!
+ERROR: INDIVIDUAL: US27: I6: Age of I6 1995-02-30 is impossible!
+ERROR: FAMILY: US02: F1: Marriage 2013-04-04 should occur after the birth of both husband and wife!
+ERROR: FAMILY: US02: F3: Marriage 1983-07-07 should occur after the birth of both husband and wife!
+ERROR: FAMILY: US02: F4: Marriage 1955-11-11 should occur after the birth of both husband and wife!
+ERROR: FAMILY: US21: F3: Current gender for the role of family F3 is wrong!
+ERROR: FAMILY: US09: F7: The birth of I22 should occur before the death of his/her parents!

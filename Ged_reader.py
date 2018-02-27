@@ -20,7 +20,7 @@ ERROR_LST = list()
 
 
 def new_error(typ, us_num, ID, msg):
-    error_msg = "ERROR: " + typ + " US: " + us_num + ": " + ID + ": " + msg 
+    error_msg = "ERROR: " + typ + ": US" + us_num + ": " + ID + ": " + msg 
     return error_msg
     
 
@@ -417,8 +417,8 @@ def run(filename):
         
 if __name__ == "__main__":
     
-    indi_dict, fam_dict = run('Family.ged')
-#    indi_dict, fam_dict = run('bugFamily.ged')
+#    indi_dict, fam_dict = run('Family.ged')
+    indi_dict, fam_dict = run('bugFamily.ged')
     
     print("Individuals")
     x = PrettyTable()
