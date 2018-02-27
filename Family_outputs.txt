@@ -3,23 +3,23 @@ Individuals
 |  ID |      Name      | Gender |  Birthday  | Age | Alive |   Death    | Child  | Spouse |
 +-----+----------------+--------+------------+-----+-------+------------+--------+--------+
 |  I1 |  Jacky /Lee/   |   M    | 1994-01-16 |  24 |  True |     NA     | {'F2'} | {'F1'} |
-|  I2 | Sophie /Goo/   |   F    | 1970-07-18 |  48 |  True |     NA     |   NA   | {'F2'} |
-|  I3 |  Jack /Lee/    |   M    | 1960-04-05 |  58 |  True |     NA     | {'F4'} | {'F3'} |
+|  I2 | Sophie /Goo/   |   F    | 1970-07-18 |  47 |  True |     NA     |   NA   | {'F2'} |
+|  I3 |  Jack /Lee/    |   M    | 1960-04-05 |  57 |  True |     NA     | {'F4'} | {'F3'} |
 |  I4 |  Yoyo /Lee/    |   M    | 1990-02-06 |  28 |  True |     NA     | {'F2'} |   NA   |
-|  I5 |  CoCo /Lee/    |   F    | 2015-06-09 |  3  |  True |     NA     | {'F1'} |   NA   |
-|  I6 |  Emma /Guo/    |   F    | 1995-04-02 |  23 |  True |     NA     | {'F5'} | {'F1'} |
-|  I7 |  Lucy /Chan/   |   F    | 1921-03-03 |  97 |  True |     NA     |   NA   | {'F4'} |
+|  I5 |  CoCo /Lee/    |   F    | 2015-06-09 |  2  |  True |     NA     | {'F1'} |   NA   |
+|  I6 |  Emma /Guo/    |   F    | 1995-04-02 |  22 |  True |     NA     | {'F5'} | {'F1'} |
+|  I7 |  Lucy /Chan/   |   F    | 1921-03-03 |  96 |  True |     NA     |   NA   | {'F4'} |
 |  I8 |  Mody /Lee/    |   M    | 1920-02-03 |  98 |  True |     NA     | {'F6'} | {'F4'} |
 |  I9 |  Mike /Lee/    |   M    | 1890-02-02 |  80 | False | 1970-06-08 |   NA   | {'F6'} |
 | I10 |  Ricky /Wei/   |   F    | 1890-02-05 |  78 | False | 1968-04-06 |   NA   | {'F6'} |
-| I11 |  Tank /Lee/    |   F    | 1920-04-03 |  98 |  True |     NA     | {'F6'} | {'F8'} |
-| I12 |  Sushi /Jan/   |   M    | 1921-04-04 |  97 |  True |     NA     |   NA   | {'F9'} |
+| I11 |  Tank /Lee/    |   F    | 1920-04-03 |  97 |  True |     NA     | {'F6'} | {'F8'} |
+| I12 |  Sushi /Jan/   |   M    | 1921-04-04 |  96 |  True |     NA     |   NA   | {'F9'} |
 | I13 |   Fan /Luo/    |   M    | 1917-03-03 |  23 | False | 1940-05-05 |   NA   | {'F8'} |
-| I14 | LiuLiu /Lee/   |   F    | 1992-03-05 |  26 |  True |     NA     | {'F2'} |   NA   |
+| I14 | LiuLiu /Lee/   |   F    | 1992-03-05 |  25 |  True |     NA     | {'F2'} |   NA   |
 | I15 |   LS /Guo/     |   M    | 1960-02-02 |  58 |  True |     NA     |   NA   | {'F5'} |
-| I16 |   LH /Guan/    |   F    | 1969-04-04 |  49 |  True |     NA     |   NA   | {'F5'} |
-| I17 |  Zhazha /St/   |   F    | 1964-04-04 |  54 |  True |     NA     |   NA   | {'F3'} |
-| I18 | Haohao /Lee/   |   M    | 1986-03-03 |  32 |  True |     NA     | {'F3'} |   NA   |
+| I16 |   LH /Guan/    |   F    | 1969-04-04 |  48 |  True |     NA     |   NA   | {'F5'} |
+| I17 |  Zhazha /St/   |   F    | 1964-04-04 |  53 |  True |     NA     |   NA   | {'F3'} |
+| I18 | Haohao /Lee/   |   M    | 1986-03-03 |  31 |  True |     NA     | {'F3'} |   NA   |
 | I19 | Divorcy /Bob/  |   F    | 1930-02-02 |  88 |  True |     NA     |   NA   | {'F9'} |
 +-----+----------------+--------+------------+-----+-------+------------+--------+--------+
 
@@ -28,12 +28,13 @@ Families
 | ID |  Married   |  Divorced  | Husband ID | Husband Name | Wife ID |   Wife Name    |       Children      |
 +----+------------+------------+------------+--------------+---------+----------------+---------------------+
 | F1 | 2013-04-04 |     NA     |     I1     | Jacky /Lee/  |    I6   |  Emma /Guo/    |        {'I5'}       |
-| F2 | 1988-06-18 |     NA     |     I3     | Jack /Lee/   |    I2   | Sophie /Goo/   | {'I14', 'I1', 'I4'} |
+| F2 | 1988-06-18 |     NA     |     I3     | Jack /Lee/   |    I2   | Sophie /Goo/   | {'I4', 'I1', 'I14'} |
 | F3 | 1983-07-07 | 1987-08-08 |     I3     | Jack /Lee/   |   I17   |  Zhazha /St/   |       {'I18'}       |
 | F4 | 1955-11-11 |     NA     |     I8     | Mody /Lee/   |    I7   |  Lucy /Chan/   |        {'I3'}       |
 | F5 | 1992-12-12 |     NA     |    I15     |  LS /Guo/    |   I16   |   LH /Guan/    |        {'I6'}       |
-| F6 | 1915-10-10 |     NA     |     I9     | Mike /Lee/   |   I10   |  Ricky /Wei/   |    {'I11', 'I8'}    |
+| F6 | 1915-10-10 |     NA     |     I9     | Mike /Lee/   |   I10   |  Ricky /Wei/   |    {'I8', 'I11'}    |
 | F7 | 1950-05-14 |     NA     |    I12     | Sushi /Jan/  |   I11   |  Tank /Lee/    |          {}         |
 | F8 | 1938-05-05 |     NA     |    I13     |  Fan /Luo/   |   I11   |  Tank /Lee/    |          {}         |
 | F9 | 1945-01-03 | 1949-03-04 |    I12     | Sushi /Jan/  |   I19   | Divorcy /Bob/  |          {}         |
 +----+------------+------------+------------+--------------+---------+----------------+---------------------+
+All good!
