@@ -123,6 +123,8 @@ def check_gender(ID,fam_dict,indi_dict):
     wife_id = fam_dict[ID]['wife_id']
     
     if indi_dict[husb_id]['gender']=="M" and indi_dict[wife_id]['gender']=="F":
-        return True
+        return True, ""
+    elif indi_dict[husb_id]['gender']!="M":
+        return False, husb_id
     else:
-        return False
+        return False, wife_id
