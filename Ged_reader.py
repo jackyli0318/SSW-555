@@ -5,9 +5,9 @@ Created on Sat Feb 10 23:11:59 2018
 
 @author: jackylee
 """
-from sprint1_re import check_date, check_married, get_age, check_unique, birth_before_parent_death, check_gender
+from sprint1 import check_date, check_married, get_age, check_unique, birth_before_parent_death, check_gender
 from prettytable import PrettyTable
-from sprint2_ZhiLi import set_line_num, get_line_num, marr_before_div, check_150, div_before_death, unique_name_birth, no_marriage_to_descendants
+from sprint2 import set_line_num, get_line_num, marr_before_div, check_150, div_before_death, unique_name_birth, no_marriage_to_descendants
 
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
 FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
