@@ -29,15 +29,14 @@ def marr_before_div(tmp_fam):
     if div != "NA":
         div = datetime.datetime.strptime(div,"%Y-%m-%d")
 
-    if marr == "NA" and div != "NA":
-        flag = False
-    elif marr != "NA":
-        if div == "NA":
-            flag = True
-        elif marr < div:
+    if div == "NA":
+        flag = True
+    if marr != "NA" and div != "NA":
+        if marr < div:
             flag = True
         else:
             flag = False
+    
     return flag
 
 

@@ -113,6 +113,8 @@ def birth_before_parent_death(cbirth,hdeath,wdeath):
     elif (hdeath != "NA" and wdeath != "NA"):
         if (wdeathdate-cbirthdate).days>=0 and (cbirthdate-hdeathdate).days<=270:
             return True
+        else:
+            return False
     else: 
         return False
    
