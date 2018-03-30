@@ -2,19 +2,19 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-
+from sprint1 import check_date
 #US 03
 def birth_before_death(birth,death):
-	#birth year, month and day
-	if birth!="NA":
+    #birth year, month and day
+    if birth!="NA":
         if check_date(birth)==True:
-            birthdate = datetime.datetime.strptime(cbirth,"%Y-%m-%d")
+            birthdate = datetime.datetime.strptime(birth,"%Y-%m-%d")
         else:
             return False
     #death year, month and day
-	if death!="NA":
+    if death!="NA":
         if check_date(death)==True:
-            deathdate = datetime.datetime.strptime(cbirth,"%Y-%m-%d")
+            deathdate = datetime.datetime.strptime(death,"%Y-%m-%d")
         else:
             return False
     #make comparison
