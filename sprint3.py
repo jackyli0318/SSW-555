@@ -6,6 +6,7 @@ from sprint1 import check_date
 #US 03
 def birth_before_death(birth,death):
     #birth year, month and day
+    '''
     if birth!="NA":
         if check_date(birth)==True:
             birthdate = datetime.datetime.strptime(birth,"%Y-%m-%d")
@@ -17,12 +18,17 @@ def birth_before_death(birth,death):
             deathdate = datetime.datetime.strptime(death,"%Y-%m-%d")
         else:
             return False
+        '''
     #make comparison
-    if (birthdate!="NA" and deathdate=="NA"):
+    if (birth!="NA" and death=="NA"):
     	return True
-    elif (birthdate!="NA" and deathdate!="NA"):
-    	if (deathdate-birthdate).days >= 0:
-    		return True
+    elif (birth=="NA" and death=="NA"):
+    	return True
+    elif (birth!="NA" and death!="NA"):
+        birthdate = datetime.datetime.strptime(birth,"%Y-%m-%d")
+        deathdate = datetime.datetime.strptime(death,"%Y-%m-%d")
+        if (deathdate-birthdate).days >= 0:
+            return True
     else:
     	return False
 

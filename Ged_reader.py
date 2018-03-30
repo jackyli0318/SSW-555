@@ -8,7 +8,7 @@ Created on Sat Feb 10 23:11:59 2018
 from sprint1 import check_date, check_married, get_age, check_unique, birth_before_parent_death, check_gender
 from prettytable import PrettyTable
 from sprint2 import set_line_num, get_line_num, marr_before_div, check_150, div_before_death, unique_name_birth, no_marriage_to_descendants
-
+from sprint3 import  birth_before_death, marr_before_death
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
 FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
@@ -351,6 +351,21 @@ def read_fam(fam_lst, indi_dict):
                     add_error(error_msg)
                 else:
                     tmp_fam['married'] = marryear + "-" + month + "-" + day 
+                
+                #US 03
+                flag, who = marr_before_death(indi_dict, marrdate, tmp_fam['husb_id'], tmp_fam['wife_id'])
+                if not flag:
+                    error_msg = "Marriage " + marrdate + " should occur before the death of "
+                    if who == "hs":
+                        error_who = tmp_fam['husb_name']
+                    elif who == "wf":
+                        error_who = tmp_fam['wife_name'] 
+                    else:
+                        error_who = tmp_fam['husb_name'] +" and " + tmp_fam['wife_name']
+                    error_msg = error_msg + error_who
+                    error_line = get_line_num(tmp_fam, field)
+                    error_msg = new_error(ERROR_TYPE['F'], "03", tmp_fam['ID'], error_msg, error_line)
+                    add_error(error_msg)
                
             
             elif datetag == "DIV":
@@ -382,8 +397,8 @@ def read_fam(fam_lst, indi_dict):
                     error_msg = error_msg + error_who
                     error_line = get_line_num(tmp_fam, field)
                     error_msg = new_error(ERROR_TYPE['F'], "06", tmp_fam['ID'], error_msg, error_line)
-                    add_error(error_msg)
-                        
+                    add_error(error_msg)                    
+                    
             if tmp_fam.get("divorced") == "":
                     tmp_fam['divorced'] = "NA"
 
@@ -427,7 +442,7 @@ def re_read_dicts(indi_dict, fam_dict):
             error_line = get_line_num(tmp_indi, field)
             error_msg = new_error(ERROR_TYPE['F'], "21", key, error_msg, error_line)
             add_error(error_msg)
-            
+        
         tmp_fam = fam_dict[key]
         if not marr_before_div(tmp_fam):
             field = 'DIV_DATE'
@@ -458,9 +473,17 @@ def re_read_indi(indi_dict):
                 error_line = get_line_num(tmp_indi, field)
                 error_msg = new_error(ERROR_TYPE['I'], "07", tmp_indi['ID'], error_msg, error_line)
                 add_error(error_msg)
-                
                 indi_dict[key]['age'] = "NA"
-                
+        #us03 
+        dob=tmp_indi['dob']
+        death=tmp_indi['death']
+        if not birth_before_death(dob,death):
+                field = "BIRT_DATE"
+                error_msg = "Age of " + tmp_indi['ID'] + " " + " born date is after death date!"
+                error_line = get_line_num(tmp_indi, field)
+                error_msg = new_error(ERROR_TYPE['I'], "03", tmp_indi['ID'], error_msg, error_line)
+                add_error(error_msg)
+                indi_dict[key]['age'] = "NA"
     return indi_dict
 
 
