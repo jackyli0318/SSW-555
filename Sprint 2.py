@@ -21,8 +21,9 @@ def No_Marriage_To_Descendants(ID,fam_dict):
 def find_descendants(ID,fam_dict,desc):
     desc.extend(fam_dict[ID]['children'])
     for key in fam_dict:
-        if fam_dict[key]['husb_id']in fam_dict[ID]['children'] or fam_dict[key]['wife_id'] in fam_dict[ID]['children']:
-            find_descendants(key,fam_dict,desc)
+        if key != ID:
+            if fam_dict[key]['husb_id']in fam_dict[ID]['children'] or fam_dict[key]['wife_id'] in fam_dict[ID]['children']:
+                find_descendants(key,fam_dict,desc)
         else:
             continue
         
@@ -44,6 +45,7 @@ def Unique_Name_N_Birth(ID1,ID2,indi_dict):
 #unittest
 
 # family record
+fam_dict1 = {'F1': {'children': ['I13','I2','I3'], 'husb_id': 'I1', 'wife_id': 'I14'}, 'F2': {'children': ['I5', 'I10', 'I12'], 'husb_id': 'I2', 'wife_id': 'I5'}}
 fam_dict = {'F8': {'wife_name': 'Tank /Lee/ ', 'divorced': 'NA', 'wife_id': 'I11', 'married': '1938-05-05', 'children': [], 'husb_id': 'I13', 'ID': 'F8', 'husb_name': 'Fan /Luo/ '}, 'F2': {'wife_name': 'Sophie /Goo/ ', 'divorced': 'NA', 'wife_id': 'I2', 'married': '1988-06-18', 'children': ['I1', 'I4', 'I14'], 'husb_id': 'I3', 'ID': 'F2', 'husb_name': 'Jack /Lee/ '}, 'F5': {'wife_name': 'LH /Guan/ ', 'divorced': 'NA', 'wife_id': 'I16', 'married': '1992-12-12', 'children': ['I6'], 'husb_id': 'I15', 'ID': 'F5', 'husb_name': 'LS /Guo/ '}, 'F7': {'wife_name': 'Tank /Lee/ ', 'divorced': 'NA', 'wife_id': 'I11', 'married': '1950-05-14', 'children': [], 'husb_id': 'I12', 'ID': 'F7', 'husb_name': 'Sushi /Jan/ '}, 'F3': {'wife_name': 'Zhazha /St/ ', 'divorced': '1987-08-08', 'wife_id': 'I17', 'married': '1983-07-07', 'children': ['I18'], 'husb_id': 'I3', 'ID': 'F3', 'husb_name': 'Jack /Lee/ '}, 'F6': {'wife_name': 'Ricky /Wei/ ', 'divorced': 'NA', 'wife_id': 'I10', 'married': '1915-10-10', 'children': ['I8', 'I11'], 'husb_id': 'I9', 'ID': 'F6', 'husb_name': 'Mike /Lee/ '}, 'F1': {'wife_name': 'Emma /Guo/ ', 'divorced': '2017-05-10', 'wife_id': 'I6', 'married': '2013-04-04', 'children': ['I5'], 'husb_id': 'I1', 'ID': 'F1', 'husb_name': 'Jacky /Lee/ '}, 'F4': {'wife_name': 'Lucy /Chan/ ', 'divorced': 'NA', 'wife_id': 'I7', 'married': '1955-11-11', 'children': ['I3'], 'husb_id': 'I8', 'ID': 'F4', 'husb_name': 'Mody /Lee/ '}}
 # different name and different birth
 indi_dict1 = {'I18': {'name': 'Haohao /Lee/ ', 'gender': 'M', 'dob': '1986-03-03', 'child': "{'F3'}", 'death': 'NA', 'age': '32', 'alive': True, 'ID': 'I18', 'spouse': 'NA'}, 'I12': {'name': 'Sushi /Jan/ ', 'gender': 'M', 'dob': '1921-04-04', 'child': 'NA', 'death': 'NA', 'age': '97', 'alive': True, 'ID': 'I12', 'spouse': "{'F7'}"}}
@@ -62,6 +64,7 @@ class TestSprint1(unittest.TestCase):
         self.assertTrue(No_Marriage_To_Descendants('F8',fam_dict))
         self.assertTrue(No_Marriage_To_Descendants('F5',fam_dict))
         self.assertTrue(No_Marriage_To_Descendants('F7',fam_dict))
+        self.assertFalse(No_Marriage_To_Descendants('F2',fam_dict1))
     
     def test_UniqNameNBirt(self):
         self.assertTrue(Unique_Name_N_Birth('I18','I12', indi_dict1))
