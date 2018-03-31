@@ -48,17 +48,62 @@ def marr_before_death(indi_dict, marr_date, husb_id, wife_id):
         husb_deat = datetime.datetime.strptime(husb_deat,"%Y-%m-%d")
         if husb_deat > marr_date:
             husb_flag = True
+    else:
+        husb_flag = True
             
     if wife_deat!='NA':
         wife_deat = datetime.datetime.strptime(wife_deat,"%Y-%m-%d")
         if wife_deat > marr_date:
             wife_flag = True
+    else:
+        wife_flag = True
     
     if husb_flag and wife_flag:
         return True, ""
     elif husb_flag:
-        return False, "hs"
-    elif wife_flag:
         return False, "wf"
+    elif wife_flag:
+        return False, "hs"
     else:
         return False, "hs_wf"
+    
+# US30
+def get_married_lst(fam, marr_lst):
+    if fam['divorced'] == 'NA' and fam['married']!="NA":
+        marr_lst.append(fam['husb_id'])
+        marr_lst.append(fam['wife_id'])
+    return marr_lst
+
+def get_living_lst(living_lst, indi_dict):
+    for indi_id in living_lst:
+        tmp_indi = indi_dict[indi_id]
+        # or 
+        # if tmp_indi['alive'] == False:
+        if tmp_indi['death'] != 'NA' or tmp_indi['dob'] == "NA":
+            living_lst.remove(indi_id)
+    return living_lst
+
+
+# US31
+def get_single_lst(indi_dict, marr_lst):
+    single_lst = list()
+    for indi_id in indi_dict:
+        tmp_indi = indi_dict[indi_id]
+        if indi_id in marr_lst:
+            continue
+        else:
+            # if tmp_indi['alive'] == False:
+            if tmp_indi['death'] == 'NA' and tmp_indi['dob'] != "NA":
+                single_lst.append(indi_id)
+    return single_lst
+
+
+
+
+
+
+
+
+
+
+

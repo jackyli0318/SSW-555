@@ -8,7 +8,7 @@ Created on Sat Feb 10 23:11:59 2018
 from sprint1 import check_date, check_married, get_age, check_unique, birth_before_parent_death, check_gender
 from prettytable import PrettyTable
 from sprint2 import set_line_num, get_line_num, marr_before_div, check_150, div_before_death, unique_name_birth, no_marriage_to_descendants
-from sprint3 import  birth_before_death, marr_before_death
+from sprint3 import birth_before_death, marr_before_death, get_married_lst, get_living_lst, get_single_lst
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
 FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
@@ -364,7 +364,7 @@ def read_fam(fam_lst, indi_dict):
                         error_who = tmp_fam['husb_name'] +" and " + tmp_fam['wife_name']
                     error_msg = error_msg + error_who
                     error_line = get_line_num(tmp_fam, field)
-                    error_msg = new_error(ERROR_TYPE['F'], "03", tmp_fam['ID'], error_msg, error_line)
+                    error_msg = new_error(ERROR_TYPE['F'], "05", tmp_fam['ID'], error_msg, error_line)
                     add_error(error_msg)
                
             
@@ -408,13 +408,17 @@ def read_fam(fam_lst, indi_dict):
     return fam_dict
 
 
-def re_read_dicts(indi_dict, fam_dict):
+def re_read_fam(indi_dict, fam_dict):
 #    spouse
+    marr_living = list()
+    single_living = list()
+    info_dict = dict()
+    
     for key in fam_dict:
-        
-        husb_id = fam_dict[key]['husb_id']
-        wife_id = fam_dict[key]['wife_id']
-        children = fam_dict[key]["children"]
+        tmp_fam = fam_dict[key]
+        husb_id = tmp_fam['husb_id']
+        wife_id = tmp_fam['wife_id']
+        children = tmp_fam["children"]
         indi_dict[husb_id]['spouse'] = "{'"+key+"'}"
         indi_dict[wife_id]['spouse'] = "{'"+key+"'}"
         
@@ -443,7 +447,7 @@ def re_read_dicts(indi_dict, fam_dict):
             error_msg = new_error(ERROR_TYPE['F'], "21", key, error_msg, error_line)
             add_error(error_msg)
         
-        tmp_fam = fam_dict[key]
+        
         if not marr_before_div(tmp_fam):
             field = 'DIV_DATE'
             error_msg = "Family: "+ key + " The marrage should occur before the divorce!"
@@ -458,7 +462,17 @@ def re_read_dicts(indi_dict, fam_dict):
             error_msg = new_error(ERROR_TYPE['F'], "17", key, error_msg, error_line)
             add_error(error_msg)
         
-    return indi_dict, fam_dict
+        marr_living = get_married_lst(tmp_fam, marr_living)
+        marr_living = get_living_lst(marr_living, indi_dict)
+        
+        single_living = get_single_lst(indi_dict, marr_living)
+    
+    marr_living.sort()
+    single_living.sort()
+    info_dict['marr_alive'] =  marr_living
+    info_dict['single_alive'] = single_living
+    
+    return indi_dict, fam_dict, info_dict
 
 
 
@@ -479,7 +493,7 @@ def re_read_indi(indi_dict):
         death=tmp_indi['death']
         if not birth_before_death(dob,death):
                 field = "BIRT_DATE"
-                error_msg = "Age of " + tmp_indi['ID'] + " " + " born date is after death date!"
+                error_msg = "Age of " + tmp_indi['ID'] + " " + " birth date is after death date!"
                 error_line = get_line_num(tmp_indi, field)
                 error_msg = new_error(ERROR_TYPE['I'], "03", tmp_indi['ID'], error_msg, error_line)
                 add_error(error_msg)
@@ -574,7 +588,7 @@ def run(filename):
         
         indi_dict = read_indi(indi_lst)
         fam_dict = read_fam(fam_lst, indi_dict)
-        indi_dict, fam_dict = re_read_dicts(indi_dict, fam_dict)
+        indi_dict, fam_dict, info_dict = re_read_fam(indi_dict, fam_dict)
         re_read_indi(indi_dict)
 #        print(indi_dict)
 #        print("")
@@ -582,14 +596,14 @@ def run(filename):
 #        print("")
         
         f.close()
-        return indi_dict, fam_dict
+        return indi_dict, fam_dict, info_dict
             
             
         
 if __name__ == "__main__":
     
-#    indi_dict, fam_dict = run('Family.ged')
-    indi_dict, fam_dict = run('bugFamily.ged')
+    indi_dict, fam_dict, info_dict = run('Family.ged')
+#    indi_dict, fam_dict, info_dict = run('bugFamily.ged')
     
     print("Individuals")
     x = PrettyTable()
@@ -611,7 +625,15 @@ if __name__ == "__main__":
                   fam["wife_id"], fam["wife_name"], fam["children"]])
     print (x)
     
+    print("Living married: ")
+    print(info_dict['marr_alive'])
+    
+    print("Living single: ")
+    print(info_dict['single_alive'])
+    
     print_error(ERROR_LST)
+    
+    
     
 #    print("")
 #    for key in indi_dict:
