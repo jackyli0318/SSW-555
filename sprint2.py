@@ -48,6 +48,32 @@ def no_marriage_to_descendants(tmp_fam):
     if husb_id in children or wife_id in children:
         return False
     return True
+
+
+def No_Marriage_To_Descendants(tmp_fam, fam_dict):
+    # ID is family id, fam_dict is family dictionary
+    husb_id = tmp_fam['husb_id']
+    wife_id = tmp_fam['wife_id']
+    descendants = []
+    find_descendants(tmp_fam['ID'],fam_dict,descendants)
+    if husb_id in descendants or wife_id in descendants:
+        return False
+    return True
+        
+desc = []
+fam_dict = {
+        'F1': {"children": ['I15', 'I14', 'I2', 'I3'], 'husb_id':'I13', 'wife_id': 'I16'},
+        'F2': {"children": ['I16', 'I2', 'I3'], 'husb_id':'I15', 'wife_id': 'I14'},
+        }
+
+def find_descendants(ID,fam_dict,desc):
+    desc.extend(fam_dict[ID]['children'])
+    for key in fam_dict:
+        if key != ID:
+            if fam_dict[key]['husb_id']in fam_dict[ID]['children'] or fam_dict[key]['wife_id'] in fam_dict[ID]['children']:
+                find_descendants(key,fam_dict,desc)
+        else:
+            continue
         
 
 # US23

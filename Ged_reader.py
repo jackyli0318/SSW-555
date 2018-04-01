@@ -483,7 +483,7 @@ def re_read_indi(indi_dict):
         if age != 'NA':
             if check_150(age) == "NA":
                 field = "BIRT_DATE"
-                error_msg = "Age of " + tmp_indi['ID'] + " " + " is impossible to be greater than 150!"
+                error_msg = "Age of " + tmp_indi['ID'] + "" + " is impossible to be greater than 150!"
                 error_line = get_line_num(tmp_indi, field)
                 error_msg = new_error(ERROR_TYPE['I'], "07", tmp_indi['ID'], error_msg, error_line)
                 add_error(error_msg)
@@ -493,7 +493,7 @@ def re_read_indi(indi_dict):
         death=tmp_indi['death']
         if not birth_before_death(dob,death):
                 field = "BIRT_DATE"
-                error_msg = "Age of " + tmp_indi['ID'] + " " + " birth date is after death date!"
+                error_msg = "Age of " + tmp_indi['ID'] + "" + "'s birth happens after death date!"
                 error_line = get_line_num(tmp_indi, field)
                 error_msg = new_error(ERROR_TYPE['I'], "03", tmp_indi['ID'], error_msg, error_line)
                 add_error(error_msg)
@@ -602,8 +602,8 @@ def run(filename):
         
 if __name__ == "__main__":
     
-    indi_dict, fam_dict, info_dict = run('Family.ged')
-#    indi_dict, fam_dict, info_dict = run('bugFamily.ged')
+#    indi_dict, fam_dict, info_dict = run('Family.ged')
+    indi_dict, fam_dict, info_dict = run('bugFamily.ged')
     
     print("Individuals")
     x = PrettyTable()
@@ -631,6 +631,7 @@ if __name__ == "__main__":
     print("Living single: ")
     print(info_dict['single_alive'])
     
+#    print_error(sorted(ERROR_LST))
     print_error(ERROR_LST)
     
     

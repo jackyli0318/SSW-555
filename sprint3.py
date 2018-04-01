@@ -3,6 +3,8 @@
 
 import datetime
 from sprint1 import check_date
+
+
 #US 03
 def birth_before_death(birth,death):
     #birth year, month and day
@@ -21,16 +23,16 @@ def birth_before_death(birth,death):
         '''
     #make comparison
     if (birth!="NA" and death=="NA"):
-    	return True
+        return True
     elif (birth=="NA" and death=="NA"):
-    	return True
+        return True
     elif (birth!="NA" and death!="NA"):
         birthdate = datetime.datetime.strptime(birth,"%Y-%m-%d")
         deathdate = datetime.datetime.strptime(death,"%Y-%m-%d")
         if (deathdate-birthdate).days >= 0:
             return True
     else:
-    	return False
+        return False
 
 #US 05
 def marr_before_death(indi_dict, marr_date, husb_id, wife_id):
