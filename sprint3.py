@@ -4,6 +4,8 @@
 import datetime
 from sprint1 import check_date
 
+NOW = datetime.datetime.now()
+
 
 #US 03
 def birth_before_death(birth,death):
@@ -100,8 +102,22 @@ def get_single_lst(indi_dict, marr_lst):
     return single_lst
 
 
+# US29
+def list_deceased(tmp_indi, deceased_lst):
+    if tmp_indi['death'] != "NA":
+        deceased_lst.append(tmp_indi['ID'])
+    return deceased_lst
 
 
+# US37
+def list_recent_birth(tmp_indi, birth_lst):
+    try:
+        birthdate = datetime.datetime.strptime(tmp_indi['dob'],'%Y-%m-%d')
+    except ValueError:
+        return birth_lst
+    if 0 <= (NOW - birthdate).days <= 30:
+        birth_lst.append(tmp_indi['ID'])
+    return birth_lst
 
 
 

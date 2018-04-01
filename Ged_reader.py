@@ -8,7 +8,7 @@ Created on Sat Feb 10 23:11:59 2018
 from sprint1 import check_date, check_married, get_age, check_unique, birth_before_parent_death, check_gender
 from prettytable import PrettyTable
 from sprint2 import set_line_num, get_line_num, marr_before_div, check_150, div_before_death, unique_name_birth, no_marriage_to_descendants
-from sprint3 import birth_before_death, marr_before_death, get_married_lst, get_living_lst, get_single_lst
+from sprint3 import birth_before_death, marr_before_death, get_married_lst, get_living_lst, get_single_lst, list_deceased, list_recent_birth
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
 FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
@@ -476,10 +476,14 @@ def re_read_fam(indi_dict, fam_dict):
 
 
 
-def re_read_indi(indi_dict):
+def re_read_indi(indi_dict, info_dict):
+    recent_birth_lst = list()
+    deceased_lst = list()
+    
     for key in indi_dict:
         tmp_indi = indi_dict[key]
         age = tmp_indi['age']
+        # US07
         if age != 'NA':
             if check_150(age) == "NA":
                 field = "BIRT_DATE"
@@ -488,7 +492,8 @@ def re_read_indi(indi_dict):
                 error_msg = new_error(ERROR_TYPE['I'], "07", tmp_indi['ID'], error_msg, error_line)
                 add_error(error_msg)
                 indi_dict[key]['age'] = "NA"
-        #us03 
+                
+        # US03 
         dob=tmp_indi['dob']
         death=tmp_indi['death']
         if not birth_before_death(dob,death):
@@ -498,7 +503,17 @@ def re_read_indi(indi_dict):
                 error_msg = new_error(ERROR_TYPE['I'], "03", tmp_indi['ID'], error_msg, error_line)
                 add_error(error_msg)
                 indi_dict[key]['age'] = "NA"
-    return indi_dict
+                
+        # US 29
+        deceased_lst = list_deceased(tmp_indi, deceased_lst)
+        info_dict['deceased_lst'] = sorted(deceased_lst)
+        
+        # US 37
+        recent_birth_lst = list_recent_birth(tmp_indi, recent_birth_lst)
+        info_dict['recent_birth_lst'] = sorted(recent_birth_lst)
+        
+        
+    return indi_dict, info_dict
 
 
 def run(filename):
@@ -589,7 +604,7 @@ def run(filename):
         indi_dict = read_indi(indi_lst)
         fam_dict = read_fam(fam_lst, indi_dict)
         indi_dict, fam_dict, info_dict = re_read_fam(indi_dict, fam_dict)
-        re_read_indi(indi_dict)
+        indi_dict, info_dict = re_read_indi(indi_dict, info_dict)
 #        print(indi_dict)
 #        print("")
 #        print(fam_dict)
@@ -602,8 +617,8 @@ def run(filename):
         
 if __name__ == "__main__":
     
-#    indi_dict, fam_dict, info_dict = run('Family.ged')
-    indi_dict, fam_dict, info_dict = run('bugFamily.ged')
+    indi_dict, fam_dict, info_dict = run('Family.ged')
+#    indi_dict, fam_dict, info_dict = run('bugFamily.ged')
     
     print("Individuals")
     x = PrettyTable()
@@ -630,6 +645,12 @@ if __name__ == "__main__":
     
     print("Living single: ")
     print(info_dict['single_alive'])
+    
+    print("Deceased list: ")
+    print(info_dict['deceased_lst'])
+    
+    print("Recent birth list: ")
+    print(info_dict['recent_birth_lst'])
     
 #    print_error(sorted(ERROR_LST))
     print_error(ERROR_LST)
