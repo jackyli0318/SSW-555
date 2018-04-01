@@ -41,39 +41,64 @@ def marr_before_div(tmp_fam):
 
 
 # US17
-def no_marriage_to_descendants(tmp_fam):
-    husb_id = tmp_fam['husb_id']
-    wife_id = tmp_fam['wife_id']
-    children = tmp_fam['children']
-    if husb_id in children or wife_id in children:
-        return False
-    return True
-
-
-#def No_Marriage_To_Descendants(tmp_fam, fam_dict):
-#    # ID is family id, fam_dict is family dictionary
+#def no_marriage_to_descendants(tmp_fam):
 #    husb_id = tmp_fam['husb_id']
 #    wife_id = tmp_fam['wife_id']
-#    descendants = []
-#    find_descendants(tmp_fam['ID'],fam_dict,descendants)
-#    if husb_id in descendants or wife_id in descendants:
+#    children = tmp_fam['children']
+#    if husb_id in children or wife_id in children:
 #        return False
 #    return True
-#        
+
+
+     
 #desc = []
 #fam_dict = {
-#        'F1': {"children": ['I15', 'I14', 'I2', 'I3'], 'husb_id':'I13', 'wife_id': 'I16'},
-#        'F2': {"children": ['I16', 'I8', 'I9'], 'husb_id':'I15', 'wife_id': 'I14'},
+#        'F1': {"ID": "F1", "children": ['I15', 'I14', 'I2', 'I3'], 'husb_id':'I13', 'wife_id': 'I16'},
+#        'F2': {"ID": "F2", "children": ['I17', 'I8', 'I9'], 'husb_id':'I15', 'wife_id': 'I14'},
+#        'F3': {"ID": "F3", "children": ['I10', 'I22'], 'husb_id':'I8', 'wife_id': 'I9'},
+#        'F4': {"ID": "F4", "children": ['I26'], 'husb_id':'I11', 'wife_id': 'I22'},
+#        'F5': {"ID": "F5", "children": ['I16'], 'husb_id':'I26', 'wife_id': 'I32'},
 #        }
-#
-#def find_descendants(ID,fam_dict,desc, spouse_id):
-#    desc.extend(fam_dict[ID]['children'])
-#    for key in fam_dict:
-#        if key != ID:
-#            if fam_dict[key]['husb_id']in fam_dict[ID]['children'] or fam_dict[key]['wife_id'] in fam_dict[ID]['children']:
-#                find_descendants(key,fam_dict,desc)
-#        else:
-#            continue
+#tmp_fam = {"ID": "F1", "children": ['I15', 'I14', 'I2', 'I3'], 'husb_id':'I13', 'wife_id': 'I16'}
+     
+# US17   
+def no_marriage_to_descendants(tmp_fam,fam_dict):
+    # ID is family id, fam_dict is family dictionary
+    husb_id = tmp_fam['husb_id']
+    wife_id = tmp_fam['wife_id']
+    desc = list()
+    desc.extend(tmp_fam['children'])
+    if husb_id in desc or wife_id in desc:
+        # if in return False
+        return False
+    
+    already_fams = set()
+    already_fams.add(tmp_fam["ID"])
+    
+    flag = True
+    while(flag):
+        flag = False
+        # iterate all families
+        for key in fam_dict:
+            # skip already extended families
+            if key in already_fams:
+                continue
+            # if husb or wife in desc, extend their children
+            if fam_dict[key]['husb_id'] in desc or fam_dict[key]['wife_id'] in desc:
+                desc.extend(fam_dict[key]['children'])
+                flag = True
+                already_fams.add(key)
+                # iterate all families again
+                break
+            
+    if husb_id in desc or wife_id in desc:
+        # if in return False
+        return False
+    else:
+        return True
+        
+        
+
         
 
 # US23

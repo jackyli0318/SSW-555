@@ -455,7 +455,7 @@ def re_read_fam(indi_dict, fam_dict):
             error_msg = new_error(ERROR_TYPE['F'], "04", key, error_msg, error_line)
             add_error(error_msg)
         
-        if not no_marriage_to_descendants(tmp_fam):
+        if not no_marriage_to_descendants(tmp_fam, fam_dict):
             field = 'CHIL'
             error_msg = "Family: "+ key + " The marrage should not occur with descendants!"
             error_line = get_line_num(tmp_fam, field)

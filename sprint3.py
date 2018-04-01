@@ -33,6 +33,8 @@ def birth_before_death(birth,death):
         deathdate = datetime.datetime.strptime(death,"%Y-%m-%d")
         if (deathdate-birthdate).days >= 0:
             return True
+        else:
+            return False
     else:
         return False
 
