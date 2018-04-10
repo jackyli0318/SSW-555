@@ -12,7 +12,7 @@ NOW_YEAR = datetime.datetime.now().strftime('%Y')
 NOW_MONTH = datetime.datetime.now().strftime('%m')
 NOW_DAY = datetime.datetime.now().strftime('%d')
 
-
+#US42, US01
 def check_date(date):
     try:
         if datetime.datetime.strptime(date,"%Y-%m-%d") > datetime.datetime.now():
@@ -20,13 +20,13 @@ def check_date(date):
             return False
     except ValueError:
 #        print(date,"is an impossible date!")
-        return False
+        return [False,"42"]
     return True
 
-
+#US10, US02
 #birth before married & married after 14
 def check_married(birth,marr):
-    if check_date(birth)==False or check_date(marr)==False:
+    if check_date(birth)!=True or check_date(marr)!=True:
         return False
     marrdate = datetime.datetime.strptime(marr,"%Y-%m-%d")
     birthdate = datetime.datetime.strptime(birth,"%Y-%m-%d")
@@ -45,13 +45,13 @@ def check_married(birth,marr):
     
     if marrage < 14:
 #        print("Marriage should occur after 14 years old!")
-        return False
+        return [False,"10"]
     else:
         return True
         
 
 def get_age(start, end=NOW):
-    if check_date(start)==False or check_date(end)==False:
+    if check_date(start)!=True or check_date(end)!=True:
         age = "NA"
         return age
     else:

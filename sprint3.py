@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-from sprint1 import check_date
 
 NOW = datetime.datetime.now()
 

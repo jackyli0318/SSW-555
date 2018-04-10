@@ -9,6 +9,8 @@ from sprint1 import check_date, check_married, get_age, check_unique, birth_befo
 from prettytable import PrettyTable
 from sprint2 import set_line_num, get_line_num, marr_before_div, check_150, div_before_death, unique_name_birth, no_marriage_to_descendants
 from sprint3 import birth_before_death, marr_before_death, get_married_lst, get_living_lst, get_single_lst, list_deceased, list_recent_birth
+
+
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
 FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
 
@@ -184,6 +186,13 @@ def read_indi(indi_lst):
                     
                     error_msg = new_error(ERROR_TYPE['I'], "01", tmp_indi['ID'], error_msg, error_line)
                     add_error(error_msg)
+                elif check_date(birthday)==[False,"42"]:
+                    tmp_indi['dob'] = "NA"
+                    error_msg = "Birthday " + birthday + " is impossible!"
+                    error_line = get_line_num(tmp_indi, field)
+                    error_msg = new_error(ERROR_TYPE['I'], "42", tmp_indi['ID'], error_msg, error_line)
+                    add_error(error_msg)
+                    
                 else:
                     tmp_indi['dob'] = birtyear + "-" + month + "-" + day
                     
@@ -210,6 +219,12 @@ def read_indi(indi_lst):
                     error_msg = "Death " + deathdate + " is impossible!"
                     error_line = get_line_num(tmp_indi, field)
                     error_msg = new_error(ERROR_TYPE['I'], "01", tmp_indi['ID'], error_msg, error_line)
+                    add_error(error_msg)
+                elif check_date(deathdate)==[False,"42"]:
+                    tmp_indi['death'] = "NA"
+                    error_msg = "Death " + deathdate + " is impossible!"
+                    error_line = get_line_num(tmp_indi, field)
+                    error_msg = new_error(ERROR_TYPE['I'], "42", tmp_indi['ID'], error_msg, error_line)
                     add_error(error_msg)
                 else:
                     tmp_indi['death'] = deathdate
@@ -342,12 +357,23 @@ def read_fam(fam_lst, indi_dict):
                     error_line = get_line_num(tmp_fam, field)
                     error_msg = new_error(ERROR_TYPE['F'], "01", tmp_fam['ID'], error_msg, error_line)
                     add_error(error_msg)
-
+                elif check_date(marrdate)==[False,"42"]:
+                    tmp_fam['married'] = "NA"
+                    error_msg = "Marriage " + marrdate + " is impossible!"
+                    error_line = get_line_num(tmp_fam, field)
+                    error_msg = new_error(ERROR_TYPE['F'], "42", tmp_fam['ID'], error_msg, error_line)
+                    add_error(error_msg)
                 elif check_married(h_birth, marrdate)==False or check_married(w_birth, marrdate)==False:
                     tmp_fam['married'] = "NA"
                     error_msg = "Marriage " + marrdate + " should occur after the birth of both husband and wife!"
                     error_line = get_line_num(tmp_fam, field)
                     error_msg = new_error(ERROR_TYPE['F'], "02", tmp_fam['ID'], error_msg, error_line)
+                    add_error(error_msg)
+                elif check_married(h_birth, marrdate)==[False,"10"] or check_married(w_birth, marrdate)==[False,"10"]:
+                    tmp_fam['married'] = "NA"
+                    error_msg = "Marriage " + marrdate + " should occur after the husband or wife is 14 years old!"
+                    error_line = get_line_num(tmp_fam, field)
+                    error_msg = new_error(ERROR_TYPE['F'], "10", tmp_fam['ID'], error_msg, error_line)
                     add_error(error_msg)
                 else:
                     tmp_fam['married'] = marryear + "-" + month + "-" + day 
@@ -381,6 +407,12 @@ def read_fam(fam_lst, indi_dict):
                     error_msg = "Divorce " + divdate + " is impossible!"
                     error_line = get_line_num(tmp_fam, field)
                     error_msg = new_error(ERROR_TYPE['F'], "01", tmp_fam['ID'], error_msg, error_line)
+                    add_error(error_msg)
+                elif check_date(divdate)==[False,"42"]:
+                    tmp_fam['divorced'] = "NA"
+                    error_msg = "Divorce " + divdate + " is impossible!"
+                    error_line = get_line_num(tmp_fam, field)
+                    error_msg = new_error(ERROR_TYPE['F'], "42", tmp_fam['ID'], error_msg, error_line)
                     add_error(error_msg)
                 else:
                     tmp_fam['divorced'] = divdate
