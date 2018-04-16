@@ -9,7 +9,7 @@ from sprint1 import check_date, check_married, get_age, check_unique, birth_befo
 from prettytable import PrettyTable
 from sprint2 import set_line_num, get_line_num, marr_before_div, check_150, div_before_death, unique_name_birth, no_marriage_to_descendants
 from sprint3 import birth_before_death, marr_before_death, get_married_lst, get_living_lst, get_single_lst, list_deceased, list_recent_birth
-
+from sprint4 import siblings, nieces_nephews, Siblings_Spacing, Multiple_Births
 
 INDI = ['INDI', 'NAME', 'SEX', 'BIRT', 'DATE', 'DEAT', 'FAMS', 'FAMC']
 FAM = ['FAM', 'HUSB', 'WIFE', '_CURRENT', 'CHIL','MARR','DIV','DATE']
@@ -178,7 +178,7 @@ def read_indi(indi_lst):
                 birtyear = wordlst[4]
                 birthday = birtyear + "-" + month + "-" + day
                 
-                if check_date(birthday)==False:
+                if check_date(birthday)=="01":
                     tmp_indi['dob'] = "NA"
                     
                     error_msg = "Birthday " + birthday + " is impossible!"
@@ -186,7 +186,7 @@ def read_indi(indi_lst):
                     
                     error_msg = new_error(ERROR_TYPE['I'], "01", tmp_indi['ID'], error_msg, error_line)
                     add_error(error_msg)
-                elif check_date(birthday)==[False,"42"]:
+                elif check_date(birthday)=="42":
                     tmp_indi['dob'] = "NA"
                     error_msg = "Birthday " + birthday + " is impossible!"
                     error_line = get_line_num(tmp_indi, field)
@@ -214,13 +214,13 @@ def read_indi(indi_lst):
                 deatyear = wordlst[4]
                 deathdate = deatyear + "-" + month + "-" + day
                 
-                if check_date(deathdate)==False:
+                if check_date(deathdate)=="01":
                     tmp_indi['death'] = "NA"
                     error_msg = "Death " + deathdate + " is impossible!"
                     error_line = get_line_num(tmp_indi, field)
                     error_msg = new_error(ERROR_TYPE['I'], "01", tmp_indi['ID'], error_msg, error_line)
                     add_error(error_msg)
-                elif check_date(deathdate)==[False,"42"]:
+                elif check_date(deathdate)=="42":
                     tmp_indi['death'] = "NA"
                     error_msg = "Death " + deathdate + " is impossible!"
                     error_line = get_line_num(tmp_indi, field)
@@ -351,25 +351,27 @@ def read_fam(fam_lst, indi_dict):
                 h_birth = indi_dict[tmp_fam['husb_id']].get('dob', "NA")
                 w_birth = indi_dict[tmp_fam['wife_id']].get('dob', "NA")
                 
-                if check_date(marrdate)==False:
+                # US01 US42
+                if check_date(marrdate)=="01":
                     tmp_fam['married'] = "NA"
                     error_msg = "Marriage " + marrdate + " is impossible!"
                     error_line = get_line_num(tmp_fam, field)
                     error_msg = new_error(ERROR_TYPE['F'], "01", tmp_fam['ID'], error_msg, error_line)
                     add_error(error_msg)
-                elif check_date(marrdate)==[False,"42"]:
+                elif check_date(marrdate)=="42":
                     tmp_fam['married'] = "NA"
                     error_msg = "Marriage " + marrdate + " is impossible!"
                     error_line = get_line_num(tmp_fam, field)
                     error_msg = new_error(ERROR_TYPE['F'], "42", tmp_fam['ID'], error_msg, error_line)
                     add_error(error_msg)
-                elif check_married(h_birth, marrdate)==False or check_married(w_birth, marrdate)==False:
+                # US02 US10
+                elif check_married(h_birth, marrdate)=="02" or check_married(w_birth, marrdate)=="02":
                     tmp_fam['married'] = "NA"
                     error_msg = "Marriage " + marrdate + " should occur after the birth of both husband and wife!"
                     error_line = get_line_num(tmp_fam, field)
                     error_msg = new_error(ERROR_TYPE['F'], "02", tmp_fam['ID'], error_msg, error_line)
                     add_error(error_msg)
-                elif check_married(h_birth, marrdate)==[False,"10"] or check_married(w_birth, marrdate)==[False,"10"]:
+                elif check_married(h_birth, marrdate)=="10" or check_married(w_birth, marrdate)=="10":
                     tmp_fam['married'] = "NA"
                     error_msg = "Marriage " + marrdate + " should occur after the husband or wife is 14 years old!"
                     error_line = get_line_num(tmp_fam, field)
@@ -378,7 +380,7 @@ def read_fam(fam_lst, indi_dict):
                 else:
                     tmp_fam['married'] = marryear + "-" + month + "-" + day 
                 
-                #US 03
+                #US 05
                 flag, who = marr_before_death(indi_dict, marrdate, tmp_fam['husb_id'], tmp_fam['wife_id'])
                 if not flag:
                     error_msg = "Marriage " + marrdate + " should occur before the death of "
@@ -402,13 +404,14 @@ def read_fam(fam_lst, indi_dict):
                 divyear = wordlst[4]
                 divdate = divyear + "-" + month + "-" + day 
                 
-                if check_date(divdate)==False:
+                # US01 US42
+                if check_date(divdate)=="01":
                     tmp_fam['divorced'] = "NA"
                     error_msg = "Divorce " + divdate + " is impossible!"
                     error_line = get_line_num(tmp_fam, field)
                     error_msg = new_error(ERROR_TYPE['F'], "01", tmp_fam['ID'], error_msg, error_line)
                     add_error(error_msg)
-                elif check_date(divdate)==[False,"42"]:
+                elif check_date(divdate)=="42":
                     tmp_fam['divorced'] = "NA"
                     error_msg = "Divorce " + divdate + " is impossible!"
                     error_line = get_line_num(tmp_fam, field)
@@ -417,6 +420,7 @@ def read_fam(fam_lst, indi_dict):
                 else:
                     tmp_fam['divorced'] = divdate
                 
+                # US06
                 flag, who = div_before_death(indi_dict, divdate, tmp_fam['husb_id'], tmp_fam['wife_id'])
                 if not flag:
                     error_msg = "Divorce " + divdate + " should occur before the death of "
@@ -462,6 +466,7 @@ def re_read_fam(indi_dict, fam_dict):
             
             cbirth = indi_dict[chld]['dob']
             
+            # US09
             if not birth_before_parent_death(cbirth,hdeath,wdeath):
                 tmp_indi = indi_dict[chld]
                 field = "BIRT_DATE"
@@ -471,6 +476,8 @@ def re_read_fam(indi_dict, fam_dict):
                 add_error(error_msg)
                 
         flag, tmp_id = check_gender(key, fam_dict, indi_dict)
+        
+        # US21
         if not flag:
             field = 'SEX'
             tmp_indi = indi_dict[tmp_id]
@@ -479,7 +486,7 @@ def re_read_fam(indi_dict, fam_dict):
             error_msg = new_error(ERROR_TYPE['F'], "21", key, error_msg, error_line)
             add_error(error_msg)
         
-        
+        # US04
         if not marr_before_div(tmp_fam):
             field = 'DIV_DATE'
             error_msg = "Family: "+ key + " The marrage should occur before the divorce!"
@@ -487,6 +494,7 @@ def re_read_fam(indi_dict, fam_dict):
             error_msg = new_error(ERROR_TYPE['F'], "04", key, error_msg, error_line)
             add_error(error_msg)
         
+        # US17
         if not no_marriage_to_descendants(tmp_fam, fam_dict):
             field = 'CHIL'
             error_msg = "Family: "+ key + " The marrage should not occur with descendants!"
@@ -494,10 +502,57 @@ def re_read_fam(indi_dict, fam_dict):
             error_msg = new_error(ERROR_TYPE['F'], "17", key, error_msg, error_line)
             add_error(error_msg)
         
+        # US18
+        husb_flag, husb_fam = siblings(tmp_fam['husb_id'], tmp_fam, fam_dict)
+        wife_flag, wife_fam = siblings(tmp_fam['wife_id'], tmp_fam, fam_dict)
+        if not husb_flag:
+            field = 'CHIL'
+            error_msg = "Family: "+ key + ": the couple are siblings. They should not marry with each other!"
+            error_line = get_line_num(husb_fam, field)
+            error_msg = new_error(ERROR_TYPE['F'], "18", key, error_msg, error_line)
+            add_error(error_msg)
+        if not wife_flag:
+            field = 'CHIL'
+            error_msg = "Family: "+ key + ": the couple are siblings. They should not marry with each other!"
+            error_line = get_line_num(wife_fam, field)
+            error_msg = new_error(ERROR_TYPE['F'], "18", key, error_msg, error_line)
+            add_error(error_msg)
+        
+        # US20
+        aunt_flag = nieces_nephews(tmp_fam['husb_id'], tmp_fam['wife_id'], fam_dict)
+        uncle_flag = nieces_nephews(tmp_fam['wife_id'], tmp_fam['husb_id'], fam_dict)
+        if not aunt_flag or not uncle_flag:
+            if not uncle_flag:
+                field = 'HUSB'
+            else:
+                field = 'WIFE'
+            error_msg = "Family: "+ key + " The marriage should not occur with nieces or nepthews!"
+            error_line = get_line_num(tmp_fam, field)
+            error_msg = new_error(ERROR_TYPE['F'], "20", key, error_msg, error_line)
+            add_error(error_msg)
+        
+        # US13
+        if not Siblings_Spacing(tmp_fam, indi_dict):
+            field = 'CHIL'
+            error_msg = "Family: "+ key + " Birth dates of siblings in this family should be more than 8 months apart or less than 2 days apart!"
+            error_line = get_line_num(tmp_fam, field)
+            error_msg = new_error(ERROR_TYPE['F'], "13", key, error_msg, error_line)
+            add_error(error_msg)
+            
+        # US14
+        if not Multiple_Births(tmp_fam, indi_dict):
+            field = 'CHIL'
+            error_msg = "Family: "+ key + " Multiple births is impossible. No more than five siblings in this family should be born at the same time!"
+            error_line = get_line_num(tmp_fam, field)
+            error_msg = new_error(ERROR_TYPE['F'], "14", key, error_msg, error_line)
+            add_error(error_msg)
+        
         marr_living = get_married_lst(tmp_fam, marr_living)
         marr_living = get_living_lst(marr_living, indi_dict)
         
         single_living = get_single_lst(indi_dict, marr_living)
+        
+        
     
     marr_living.sort()
     single_living.sort()
@@ -529,12 +584,12 @@ def re_read_indi(indi_dict, info_dict):
         dob=tmp_indi['dob']
         death=tmp_indi['death']
         if not birth_before_death(dob,death):
-                field = "BIRT_DATE"
-                error_msg = "The birth of " + tmp_indi['ID'] + "" + " happens after death date!"
-                error_line = get_line_num(tmp_indi, field)
-                error_msg = new_error(ERROR_TYPE['I'], "03", tmp_indi['ID'], error_msg, error_line)
-                add_error(error_msg)
-                indi_dict[key]['age'] = "NA"
+            field = "BIRT_DATE"
+            error_msg = "The birth of " + tmp_indi['ID'] + "" + " happens after death date!"
+            error_line = get_line_num(tmp_indi, field)
+            error_msg = new_error(ERROR_TYPE['I'], "03", tmp_indi['ID'], error_msg, error_line)
+            add_error(error_msg)
+            indi_dict[key]['age'] = "NA"
                 
         # US 29
         deceased_lst = list_deceased(tmp_indi, deceased_lst)
@@ -570,7 +625,7 @@ def run(filename):
             
             wordlst = line.strip().split(" ")
             if len(wordlst) < 2:
-                print("next line")
+#                print("next line")
                 continue
             
             # adjust the postion of "FAM" and "INDI"

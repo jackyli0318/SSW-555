@@ -17,10 +17,10 @@ def check_date(date):
     try:
         if datetime.datetime.strptime(date,"%Y-%m-%d") > datetime.datetime.now():
 #            print(date,"is an impossible date!")
-            return False
+            return "01"
     except ValueError:
 #        print(date,"is an impossible date!")
-        return [False,"42"]
+        return "42"
     return True
 
 #US10, US02
@@ -33,7 +33,7 @@ def check_married(birth,marr):
     
     if birthdate > marrdate:
 #        print("Marriage should not occur before birth!")
-        return False
+        return "02"
 #    else:
 #        return True
     marrage = marrdate.year - birthdate.year
@@ -45,7 +45,7 @@ def check_married(birth,marr):
     
     if marrage < 14:
 #        print("Marriage should occur after 14 years old!")
-        return [False,"10"]
+        return "10"
     else:
         return True
         
