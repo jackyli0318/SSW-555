@@ -704,8 +704,8 @@ def run(filename):
         
 if __name__ == "__main__":
     
-#    indi_dict, fam_dict, info_dict = run('Family.ged')
-    indi_dict, fam_dict, info_dict = run('bugFamily.ged')
+    indi_dict, fam_dict, info_dict = run('Family.ged')
+#    indi_dict, fam_dict, info_dict = run('bugFamily.ged')
     
     print("Individuals")
     x = PrettyTable()
